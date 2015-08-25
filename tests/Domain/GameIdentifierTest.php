@@ -3,7 +3,6 @@
 namespace Wecamp\FlyingLiqourice\Domain;
 
 use Rhumsaa\Uuid\Uuid;
-use Wecamp\FlyingLiqourice\Domain\GameIdentifier;
 
 final class GameIdentifierTest extends \PHPUnit_Framework_TestCase
 {
