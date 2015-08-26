@@ -23,6 +23,53 @@ class Fields implements \IteratorAggregate
     }
 
     /**
+     * @return array
+     */
+    private static function generateShips()
+    {
+        $ships = [
+            [
+                Ship::create(Coords::create(4, 9), Coords::create(9, 9)),
+                Ship::create(Coords::create(6, 0), Coords::create(9, 0)),
+                Ship::create(Coords::create(0, 2), Coords::create(0, 5)),
+                Ship::create(Coords::create(3, 0), Coords::create(3, 2)),
+                Ship::create(Coords::create(5, 2), Coords::create(7, 2)),
+                Ship::create(Coords::create(9, 5), Coords::create(9, 7)),
+                Ship::create(Coords::create(0, 0), Coords::create(1, 0)),
+                Ship::create(Coords::create(9, 2), Coords::create(9, 3)),
+                Ship::create(Coords::create(5, 5), Coords::create(5, 6)),
+                Ship::create(Coords::create(0, 7), Coords::create(1, 7))
+            ],
+            [
+                Ship::create(Coords::create(0, 0), Coords::create(0, 5)),
+                Ship::create(Coords::create(1, 0), Coords::create(1, 3)),
+                Ship::create(Coords::create(2, 0), Coords::create(2, 3)),
+                Ship::create(Coords::create(3, 0), Coords::create(3, 2)),
+                Ship::create(Coords::create(4, 0), Coords::create(4, 2)),
+                Ship::create(Coords::create(5, 0), Coords::create(5, 2)),
+                Ship::create(Coords::create(6, 0), Coords::create(6, 1)),
+                Ship::create(Coords::create(7, 0), Coords::create(7, 1)),
+                Ship::create(Coords::create(8, 0), Coords::create(8, 1)),
+                Ship::create(Coords::create(9, 0), Coords::create(9, 1))
+            ],
+            [
+                Ship::create(Coords::create(9, 4), Coords::create(9, 9)),
+                Ship::create(Coords::create(0, 6), Coords::create(0, 9)),
+                Ship::create(Coords::create(2, 0), Coords::create(5, 0)),
+                Ship::create(Coords::create(0, 3), Coords::create(2, 3)),
+                Ship::create(Coords::create(2, 5), Coords::create(2, 7)),
+                Ship::create(Coords::create(5, 9), Coords::create(7, 9)),
+                Ship::create(Coords::create(0, 0), Coords::create(0, 1)),
+                Ship::create(Coords::create(2, 9), Coords::create(3, 9)),
+                Ship::create(Coords::create(5, 5), Coords::create(6, 5)),
+                Ship::create(Coords::create(7, 0), Coords::create(7, 1))
+            ],
+        ];
+
+        return $ships[array_rand($ships)];
+    }
+
+    /**
      * @return \ArrayIterator
      */
     public function getIterator()
@@ -31,6 +78,9 @@ class Fields implements \IteratorAggregate
     }
 
     /**
+     * @param int $width
+     * @param int $height
+     * @param array $shipSizes
      * @return static
      */
     public static function generate($width, $height, array $shipSizes)
@@ -39,17 +89,24 @@ class Fields implements \IteratorAggregate
         Assertion::integer($height);
         Assertion::allInteger($shipSizes);
 
-        // @Todo Something spiffy to place ships
+        $ships = self::generateShips();
+
         $elements = [];
-        for ($x = 0; $x < $width; $x++) {
-            for ($y = 0; $y < $height; $y++) {
+        for ($y = 0; $y < $height; $y++) {
+            for ($x = 0; $x < $width; $x++) {
+                $shipOnField = null;
+                foreach ($ships as $ship) {
+                    /** @var Ship $ship */
+                    if ($ship->on(Coords::create($x, $y))) {
+                        $shipOnField = $ship;
+                        break;
+                    }
+                }
+
                 $elements[] = Field::generate(
                     $x,
                     $y,
-                    Ship::create(
-                        Coords::create($x, $y),
-                        Coords::create($x, $y)
-                    )
+                    $shipOnField
                 );
             }
         }
@@ -84,11 +141,11 @@ class Fields implements \IteratorAggregate
     /**
      * @param Coords $coords
      */
-    public function hit(Coords $coords)
+    public function shoot(Coords $coords)
     {
         foreach($this->elements as $element) {
             if ($element->at($coords)) {
-                $element->hit();
+                $element->shoot();
                 return;
             }
         }
@@ -132,5 +189,38 @@ class Fields implements \IteratorAggregate
                 return $element->endPointOfShip();
             }
         }
+    }
+
+    public function __toString()
+    {
+        $result = '';
+        $currentRow = 0;
+        foreach ($this->elements as $element) {
+            if ($element->coords()->y() > $currentRow) {
+                $result .= PHP_EOL;
+                $currentRow++;
+            }
+
+            $result .= $this->determineElementOutput($element);
+        }
+
+        return $result;
+    }
+
+    private function determineElementOutput(Field $element)
+    {
+        if ($element->hit()) {
+            return 'X';
+        }
+
+        if ($element->miss()) {
+            return 'O';
+        }
+
+        if ($element->occupied()) {
+            return '·';
+        }
+
+        return ' ';
     }
 }

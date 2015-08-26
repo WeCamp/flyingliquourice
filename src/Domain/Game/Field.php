@@ -20,27 +20,27 @@ class Field
     /**
      * @var boolean
      */
-    private $hit;
+    private $shot;
 
-    private function __construct(Coords $coords, Ship $ship = null, $hit = false)
+    private function __construct(Coords $coords, Ship $ship = null, $shot = false)
     {
-        Assertion::boolean($hit);
+        Assertion::boolean($shot);
 
         $this->coords = $coords;
         $this->ship = $ship;
-        $this->hit = $hit;
+        $this->shot = $shot;
     }
 
     /**
      * @param int $x
      * @param int $y
      * @param Ship|null $ship
-     * @param bool $hit
+     * @param bool $shot
      * @return static
      */
-    public static function generate($x, $y, Ship $ship = null, $hit = false)
+    public static function generate($x, $y, Ship $ship = null, $shot = false)
     {
-        return new static(Coords::create($x, $y), $ship, $hit);
+        return new static(Coords::create($x, $y), $ship, $shot);
     }
 
     /**
@@ -51,8 +51,8 @@ class Field
     {
         return new static(
             Coords::fromArray($field['coords']),
-            Ship::fromArray($field['ship']),
-            $field['hit']
+            ($field['ship'] !== null) ? Ship::fromArray($field['ship']) : null,
+            $field['shot']
         );
     }
 
@@ -63,8 +63,8 @@ class Field
     {
         return [
             'coords' => $this->coords->toArray(),
-            'ship' => $this->ship->toArray(),
-            'hit' => $this->hit
+            'ship' => $this->occupied() ? $this->ship->toArray() : null,
+            'shot' => $this->shot
         ];
     }
 
@@ -85,16 +85,32 @@ class Field
         return $this->coords->equals($coords);
     }
 
-    public function hit()
+    public function shoot()
     {
-        if ($this->hit) {
-            throw new FieldAlreadyBeenHitException();
+        if ($this->shot) {
+            throw new FieldAlreadyBeenShotException();
         }
 
-        $this->hit = true;
+        $this->shot = true;
         if ($this->occupied()) {
             $this->ship->hit();
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function hit()
+    {
+        return $this->occupied() && $this->shot;
+    }
+
+    /**
+     * @return bool
+     */
+    public function miss()
+    {
+        return !$this->occupied() && $this->shot;
     }
 
     /**
@@ -127,5 +143,13 @@ class Field
         }
 
         return $this->ship->endPoint();
+    }
+
+    /**
+     * @return Coords
+     */
+    public function coords()
+    {
+        return $this->coords;
     }
 }

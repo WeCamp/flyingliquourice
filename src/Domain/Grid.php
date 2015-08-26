@@ -113,11 +113,11 @@ class Grid
     /**
      * @param Coords $coords
      */
-    public function hitAt(Coords $coords)
+    public function shoot(Coords $coords)
     {
         $this->ensureCoordsInGrid($coords);
 
-        $this->fields->hit($coords);
+        $this->fields->shoot($coords);
     }
 
     /**
@@ -151,6 +151,14 @@ class Grid
         $this->ensureCoordsInGrid($coords);
 
         return $this->fields->endPointOfShipAt($coords);
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->fields;
     }
 
     /**

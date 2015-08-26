@@ -104,4 +104,27 @@ class Ship
     {
         return $this->endPoint;
     }
+
+    /**
+     * @param Coords $coords
+     * @return bool
+     */
+    public function on(Coords $coords)
+    {
+        if ($coords->x() == $this->startPoint->x()
+            && $coords->y() >= $this->startPoint->y()
+            && $coords->y() <= $this->endPoint->y()
+        ) {
+            return true;
+        }
+
+        if ($coords->y() == $this->startPoint->y()
+            && $coords->x() >= $this->startPoint->x()
+            && $coords->x() <= $this->endPoint->x()
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 }
