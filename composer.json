@@ -20,6 +20,7 @@
         "phpunit/phpunit": "^4.8",
         "mockery/mockery": "^0.9.4",
         "robmorgan/phinx": "^0.4.4",
-        "whatthejeff/nyancat-phpunit-resultprinter": "^1.2"
+        "whatthejeff/nyancat-phpunit-resultprinter": "^1.2",
+        "humbug/humbug": "~1.0@dev"
     }
 }
