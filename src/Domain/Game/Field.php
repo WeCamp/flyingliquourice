@@ -159,4 +159,41 @@ class Field
     {
         $this->ship = $ship;
     }
+
+    public function __toString()
+    {
+        if ($this->hit()) {
+            return '🔥';
+        }
+
+        if ($this->miss()) {
+            return '💦';
+        }
+
+        if ($this->occupied() && $this->ship->startPoint()->equals($this->coords())) {
+            if ($this->ship->startPoint()->x() == $this->ship->endPoint()->x()) {
+                return '^';
+            }
+
+            return '<';
+        }
+
+        if ($this->occupied() && $this->ship->endPoint()->equals($this->coords())) {
+            if ($this->ship->startPoint()->x() == $this->ship->endPoint()->x()) {
+                return 'v';
+            }
+
+            return '>';
+        }
+
+        if ($this->occupied()) {
+            if ($this->ship->startPoint()->x() == $this->ship->endPoint()->x()) {
+                return 'ǁ';
+            }
+
+            return '=';
+        }
+
+        return ' ';
+    }
 }

@@ -158,34 +158,17 @@ class Fields implements \IteratorAggregate
 
     public function __toString()
     {
-        $result = '';
+        $result = PHP_EOL . '|';
         $currentRow = 0;
         foreach ($this->elements as $element) {
             if ($element->coords()->y() > $currentRow) {
-                $result .= PHP_EOL;
+                $result .= '|' . PHP_EOL . '|';
                 $currentRow++;
             }
 
-            $result .= $this->determineElementOutput($element);
+            $result .= (string) $element;
         }
 
-        return $result;
-    }
-
-    private function determineElementOutput(Field $element)
-    {
-        if ($element->hit()) {
-            return 'X';
-        }
-
-        if ($element->miss()) {
-            return 'O';
-        }
-
-        if ($element->occupied()) {
-            return '·';
-        }
-
-        return ' ';
+        return $result . '|' . PHP_EOL;
     }
 }

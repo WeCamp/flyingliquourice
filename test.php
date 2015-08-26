@@ -4,11 +4,12 @@ require __DIR__ . '/vendor/autoload.php';
 
 $game = Wecamp\FlyingLiqourice\Domain\Game::create();
 
-/**
-$game->fire(\Wecamp\FlyingLiqourice\Domain\Game\Coords::create(0, 0));
-$game->fire(\Wecamp\FlyingLiqourice\Domain\Game\Coords::create(3, 3));
-$game->fire(\Wecamp\FlyingLiqourice\Domain\Game\Coords::create(5, 0));
-$game->fire(\Wecamp\FlyingLiqourice\Domain\Game\Coords::create(9, 9));
+for ($i = 0; $i < 10; $i++) {
+    try {
+        $game->fire(\Wecamp\FlyingLiqourice\Domain\Game\Coords::create(mt_rand(0, 9), mt_rand(0, 9)));
+    } catch (Wecamp\FlyingLiqourice\Domain\Game\FieldAlreadyBeenShotException $e) {
+        // hihi
+    }
+}
 
- */
 echo $game;
