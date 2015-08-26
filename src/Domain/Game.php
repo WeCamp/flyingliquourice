@@ -2,12 +2,21 @@
 
 namespace Wecamp\FlyingLiqourice\Domain;
 
+use Wecamp\FlyingLiqourice\Domain\Game\FieldAlreadyBeenHitException;
+use Wecamp\FlyingLiqourice\Domain\Game\CoordsNotInGridException;
+use Wecamp\FlyingLiqourice\Domain\Game\FireResult;
+
 final class Game
 {
     /**
      * @var Identifier
      */
     private $id;
+
+    /**
+     * @var Grid
+     */
+    private $grid;
 
     /**
      * Creates a new game.
@@ -17,8 +26,33 @@ final class Game
     public static function create()
     {
         return new static(
-            GameIdentifier::generate()
+            GameIdentifier::generate(),
+            Grid::generate()
         );
+    }
+
+    /**
+     * @param Coords $coords
+     * @return static
+     */
+    public function fire(Coords $coords)
+    {
+        $this->grid->hitAt($coords);
+
+        if (!$this->grid->hasShipAt($coords)) {
+            return FireResult::miss();
+        }
+        //@todo Check for win
+
+//        if ($this->grid->didAllShipsSank()) {
+//            return FireResult::win();
+//        }
+
+        if ($this->grid->didShipSankAt($coords)) {
+            return FireResult::sank();
+        }
+
+        return FireResult::hit();
     }
 
     /**
@@ -30,7 +64,8 @@ final class Game
     public static function fromArray(array $data)
     {
         return new static(
-            GameIdentifier::fromString($data['id'])
+            GameIdentifier::fromString($data['id']),
+            Grid::fromArray($data['grid'])
         );
     }
 
@@ -52,15 +87,18 @@ final class Game
     public function toArray()
     {
         return [
-            'id' => (string) $this->id
+            'id' => (string) $this->id,
+            'grid' => $this->grid->toArray()
         ];
     }
 
     /**
      * @param Identifier $id
+     * @param Grid $grid
      */
-    private function __construct(Identifier $id)
+    private function __construct(Identifier $id, Grid $grid)
     {
         $this->id = $id;
+        $this->grid = $grid;
     }
 }
