@@ -1,11 +1,8 @@
 <?php
 
-namespace Wecamp\FlyingLiqourice\Domain;
+namespace Wecamp\FlyingLiqourice\Domain\Game;
 
 use Assert\Assertion;
-use Wecamp\FlyingLiqourice\Domain\Game\CoordsNotInGridException;
-use Wecamp\FlyingLiqourice\Domain\Game\Field;
-use Wecamp\FlyingLiqourice\Domain\Game\Fields;
 
 class Grid
 {

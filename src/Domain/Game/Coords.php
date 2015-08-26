@@ -1,13 +1,11 @@
 <?php
 
-namespace Wecamp\FlyingLiqourice\Domain;
+namespace Wecamp\FlyingLiqourice\Domain\Game;
 
 use Assert\Assertion;
-use Wecamp\FlyingLiqourice\Domain\Game\CannotCalculateDistanceBetweenDiagonalCoordsException;
 
 class Coords
 {
-
     /**
      * @var int
      */

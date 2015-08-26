@@ -2,7 +2,9 @@
 
 namespace Wecamp\FlyingLiqourice\Domain;
 
+use Wecamp\FlyingLiqourice\Domain\Game\Coords;
 use Wecamp\FlyingLiqourice\Domain\Game\FireResult;
+use Wecamp\FlyingLiqourice\Domain\Game\Grid;
 
 final class Game
 {

@@ -4,7 +4,6 @@
 namespace Wecamp\FlyingLiqourice\Domain\Game;
 
 use Assert\Assertion;
-use Wecamp\FlyingLiqourice\Domain\Coords;
 
 class Ship
 {
