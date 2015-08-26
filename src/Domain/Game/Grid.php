@@ -56,7 +56,11 @@ class Grid
         return new static(
             static::DEFAULT_WIDTH,
             static::DEFAULT_HEIGHT,
-            Fields::generate(static::DEFAULT_WIDTH, static::DEFAULT_HEIGHT, static::$defaultShipSizes)
+            FieldsGenerator::generate(
+                static::DEFAULT_WIDTH,
+                static::DEFAULT_HEIGHT,
+                static::$defaultShipSizes
+            )
         );
     }
 

@@ -151,4 +151,12 @@ class Field
     {
         return $this->coords;
     }
+
+    /**
+     * @param Ship $ship
+     */
+    public function place(Ship $ship)
+    {
+        $this->ship = $ship;
+    }
 }
