@@ -56,7 +56,7 @@ class Grid
      */
     public static function generate()
     {
-        return new static (
+        return new static(
             static::DEFAULT_WIDTH,
             static::DEFAULT_HEIGHT,
             Fields::generate(static::DEFAULT_WIDTH, static::DEFAULT_HEIGHT, static::$defaultShipSizes)
@@ -69,22 +69,6 @@ class Grid
     public function toArray()
     {
         return ['width' => $this->width, 'height' => $this->height, 'fields'=> $this->fields->toArray()];
-    }
-
-    /**
-     * @return int
-     */
-    public function getWidth()
-    {
-        return $this->width;
-    }
-
-    /**
-     * @return int
-     */
-    public function getHeight()
-    {
-        return $this->height;
     }
 
     /**
@@ -116,6 +100,8 @@ class Grid
      */
     public function hasShipAt(Coords $coords)
     {
+        $this->ensureCoordsInGrid($coords);
+
         foreach($this->fields as $field) {
             if ($field->at($coords) && $field->occupied()) {
                 return true;
@@ -129,10 +115,8 @@ class Grid
      */
     public function hitAt(Coords $coords)
     {
-        if (!$this->has($coords)) {
-            throw new CoordsNotInGridException();
-        }
-        
+        $this->ensureCoordsInGrid($coords);
+
         $this->fields->hit($coords);
     }
 
@@ -142,6 +126,40 @@ class Grid
      */
     public function didShipSankAt(Coords $coords)
     {
+        $this->ensureCoordsInGrid($coords);
+
         return $this->fields->didShipSankAt($coords);
+    }
+
+    /**
+     * @param Coords $coords
+     * @return Coords
+     */
+    public function startPointOfShipAt(Coords $coords)
+    {
+        $this->ensureCoordsInGrid($coords);
+
+        return $this->fields->startPointOfShipAt($coords);
+    }
+
+    /**
+     * @param Coords $coords
+     * @return Coords
+     */
+    public function endPointOfShipAt(Coords $coords)
+    {
+        $this->ensureCoordsInGrid($coords);
+
+        return $this->fields->endPointOfShipAt($coords);
+    }
+
+    /**
+     * @param Coords $coords
+     */
+    private function ensureCoordsInGrid(Coords $coords)
+    {
+        if (!$this->has($coords)) {
+            throw new CoordsNotInGridException();
+        }
     }
 }

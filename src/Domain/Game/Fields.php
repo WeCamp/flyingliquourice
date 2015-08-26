@@ -39,16 +39,18 @@ class Fields implements \IteratorAggregate
         Assertion::integer($height);
         Assertion::allInteger($shipSizes);
 
-        $ships = [];
-        foreach ($shipSizes as $shipSize) {
-            $ships[] = Ship::create($shipSize);
-        }
-
-        //@Todo Something spiffy to place ships
+        // @Todo Something spiffy to place ships
         $elements = [];
         for ($x = 0; $x < $width; $x++) {
             for ($y = 0; $y < $height; $y++) {
-                $elements[] = Field::generate($x, $y, Ship::create(1));
+                $elements[] = Field::generate(
+                    $x,
+                    $y,
+                    Ship::create(
+                        Coords::create($x, $y),
+                        Coords::create($x, $y)
+                    )
+                );
             }
         }
         return new static ($elements);
@@ -99,11 +101,36 @@ class Fields implements \IteratorAggregate
     public function didShipSankAt(Coords $coords)
     {
         foreach($this->elements as $element) {
-            /** @var Field $element */
             if ($element->at($coords)) {
                 return $element->hasSunkenShip();
             }
         }
         return false;
+    }
+
+    /**
+     * @param Coords $coords
+     * @return Coords
+     */
+    public function startPointOfShipAt(Coords $coords)
+    {
+        foreach ($this->elements as $element) {
+            if ($element->at($coords)) {
+                return $element->startPointOfShip();
+            }
+        }
+    }
+
+    /**
+     * @param Coords $coords
+     * @return Coords
+     */
+    public function endPointOfShipAt(Coords $coords)
+    {
+        foreach ($this->elements as $element) {
+            if ($element->at($coords)) {
+                return $element->endPointOfShip();
+            }
+        }
     }
 }

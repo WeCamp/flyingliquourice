@@ -3,31 +3,39 @@
 
 namespace Wecamp\FlyingLiqourice\Domain\Game;
 
-
 use Assert\Assertion;
+use Wecamp\FlyingLiqourice\Domain\Coords;
 
 class Ship
 {
+    const MINIMUM_SIZE = 1;
+
     /**
-     * @var int
+     * @var Coords
      */
-    private $size;
+    private $startPoint;
+
+    /**
+     * @var Coords
+     */
+    private $endPoint;
 
     /**
      * @var int
      */
     private $hits = 0;
 
-    private function __construct($size, $hits = 0)
+    private function __construct(Coords $startPoint, Coords $endPoint, $hits = 0)
     {
-        Assertion::integer($size);
         Assertion::integer($hits);
-
-        Assertion::greaterThan($size, 0);
         Assertion::greaterOrEqualThan($hits, 0);
+
+        $size = $startPoint->distance($endPoint) + 1;
+        Assertion::greaterOrEqualThan($size, static::MINIMUM_SIZE);
         Assertion::lessOrEqualThan($hits, $size);
 
-        $this->size = $size;
+        $this->startPoint = $startPoint;
+        $this->endPoint = $endPoint;
         $this->hits = $hits;
     }
 
@@ -37,7 +45,11 @@ class Ship
      */
     public static function fromArray(array $ship)
     {
-        return new static ($ship['size'], $ship['hits']);
+        return new static(
+            Coords::fromArray($ship['startPoint']),
+            Coords::fromArray($ship['endPoint']),
+            $ship['hits']
+        );
     }
 
     /**
@@ -46,18 +58,20 @@ class Ship
     public function toArray()
     {
         return [
-            'size'=>$this->size,
-            'hits'=>$this->hits
+            'startPoint' => $this->startPoint->toArray(),
+            'endPoint' => $this->endPoint->toArray(),
+            'hits' => $this->hits
         ];
     }
 
     /**
-     * @param integer $size
+     * @param Coords $startPoint
+     * @param Coords $endPoint
      * @return static
      */
-    public static function create($size)
+    public static function create(Coords $startPoint, Coords $endPoint)
     {
-        return new static ($size);
+        return new static($startPoint, $endPoint);
     }
 
     public function hit()
@@ -70,6 +84,24 @@ class Ship
      */
     public function hasSunk()
     {
-        return ($this->hits === $this->size);
+        $size = $this->startPoint->distance($this->endPoint) + 1;
+
+        return ($this->hits === $size);
+    }
+
+    /**
+     * @return Coords
+     */
+    public function startPoint()
+    {
+        return $this->startPoint;
+    }
+
+    /**
+     * @return Coords
+     */
+    public function endPoint()
+    {
+        return $this->endPoint;
     }
 }

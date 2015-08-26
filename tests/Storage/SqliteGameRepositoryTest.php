@@ -59,9 +59,8 @@ final class SqliteGameRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function it_should_get_a_game()
     {
-        $identifier = GameIdentifier::generate();
-        $gameData = ['id' => (string) $identifier];
-        $game = Game::fromArray($gameData);
+        $game = Game::create();
+        $identifier = $game->id();
 
         $stmt = $this->getMockBuilder('stdClass')
             ->setMethods(['execute', 'rowCount', 'fetchColumn'])

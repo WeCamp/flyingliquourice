@@ -17,7 +17,7 @@ class Field
      */
     private $ship;
 
-    /*
+    /**
      * @var boolean
      */
     private $hit;
@@ -40,7 +40,7 @@ class Field
      */
     public static function generate($x, $y, Ship $ship = null, $hit = false)
     {
-        return new static(new Coords($x, $y), $ship, $hit);
+        return new static(Coords::create($x, $y), $ship, $hit);
     }
 
     /**
@@ -50,7 +50,7 @@ class Field
     public static function fromArray(array $field)
     {
         return new static(
-            new Coords($field['x'], $field['y']),
+            Coords::fromArray($field['coords']),
             Ship::fromArray($field['ship']),
             $field['hit']
         );
@@ -62,8 +62,7 @@ class Field
     public function toArray()
     {
         return [
-            'x' => $this->coords->x(),
-            'y' => $this->coords->y(),
+            'coords' => $this->coords->toArray(),
             'ship' => $this->ship->toArray(),
             'hit' => $this->hit
         ];
@@ -93,11 +92,9 @@ class Field
         }
 
         $this->hit = true;
-        if (!$this->occupied()) {
-            return;
+        if ($this->occupied()) {
+            $this->ship->hit();
         }
-
-        $this->ship->hit();
     }
 
     /**
@@ -106,5 +103,29 @@ class Field
     public function hasSunkenShip()
     {
         return ($this->occupied() && $this->ship->hasSunk());
+    }
+
+    /**
+     * @return Coords
+     */
+    public function startPointOfShip()
+    {
+        if (!$this->occupied()) {
+            throw new NoShipAtThisFieldException();
+        }
+
+        return $this->ship->startPoint();
+    }
+
+    /**
+     * @return Coords
+     */
+    public function endPointOfShip()
+    {
+        if (!$this->occupied()) {
+            throw new NoShipAtThisFieldException();
+        }
+
+        return $this->ship->endPoint();
     }
 }

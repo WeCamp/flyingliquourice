@@ -40,6 +40,8 @@ final class Game
         if (!$this->grid->hasShipAt($coords)) {
             return FireResult::miss();
         }
+
+
         //@todo Check for win
 
 //        if ($this->grid->didAllShipsSank()) {
@@ -47,7 +49,10 @@ final class Game
 //        }
 
         if ($this->grid->didShipSankAt($coords)) {
-            return FireResult::sank();
+            return FireResult::sank(
+                $this->grid->startPointOfShipAt($coords),
+                $this->grid->endPointOfShipAt($coords)
+            );
         }
 
         return FireResult::hit();
