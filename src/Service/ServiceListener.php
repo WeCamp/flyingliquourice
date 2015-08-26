@@ -82,7 +82,7 @@ class ServiceListener
 
         $this->id = $game->id();
         $result = json_encode('You lost');
-        echo 'Quiting game' . $game->id() . PHP_EOL;
+        echo 'Quitting game' . $game->id() . PHP_EOL;
         return $result;
     }
 
