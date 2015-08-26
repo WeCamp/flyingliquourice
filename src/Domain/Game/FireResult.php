@@ -10,8 +10,9 @@ use Wecamp\FlyingLiqourice\Domain\Coords;
 class FireResult
 {
     const MISS = 'MISS';
-    const HIT = 'HIT';
+    const HIT  = 'HIT';
     const SANK = 'SANK';
+    const WIN  = 'WIN';
 
     /**
      * @var string
@@ -71,6 +72,16 @@ class FireResult
     public static function sank(Coords $startPoint, Coords $endPoint)
     {
         return new static(static::SANK, $startPoint, $endPoint);
+    }
+
+    /**
+     * @param Coords $startPoint
+     * @param Coords $endPoint
+     * @return static
+     */
+    public static function win(Coords $startPoint, Coords $endPoint)
+    {
+        return new static(static::WIN, $startPoint, $endPoint);
     }
 
     /**

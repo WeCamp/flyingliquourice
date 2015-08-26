@@ -162,4 +162,12 @@ class Grid
             throw new CoordsNotInGridException();
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function didAllShipsSink()
+    {
+        return $this->fields->didAllShipsSink();
+    }
 }
