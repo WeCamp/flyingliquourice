@@ -2,15 +2,21 @@
 
 namespace Wecamp\FlyingLiqourice\Domain;
 
-
 use Assert\Assertion;
-use Wecamp\FlyingLiqourice\Domain\Game\FieldAlreadyBeenHitException;
 use Wecamp\FlyingLiqourice\Domain\Game\CoordsNotInGridException;
 use Wecamp\FlyingLiqourice\Domain\Game\Field;
 use Wecamp\FlyingLiqourice\Domain\Game\Fields;
 
 class Grid
 {
+    const DEFAULT_WIDTH = 10;
+    const DEFAULT_HEIGHT = 10;
+
+    /**
+     * @var array
+     */
+    private static $defaultShipSizes = [6,4,4,3,3,3,2,2,2,2];
+
     /**
      * @var int
      */
@@ -21,15 +27,10 @@ class Grid
      */
     private $height;
 
-    /*
-     * @var Fields
+    /**
+     * @var Fields|Field[]
      */
     private $fields;
-
-    private static $defaultShipSizes = [6,4,4,3,3,3,2,2,2,2];
-
-    CONST DEFAULT_WIDTH = 10;
-    CONST DEFAULT_HEIGHT = 10;
 
     public function __construct($width, $height, Fields $fields)
     {
@@ -109,6 +110,10 @@ class Grid
         return true;
     }
 
+    /**
+     * @param Coords $coords
+     * @return bool
+     */
     public function hasShipAt(Coords $coords)
     {
         foreach($this->fields as $field) {
@@ -125,12 +130,17 @@ class Grid
     public function hitAt(Coords $coords)
     {
         if (!$this->has($coords)) {
-            Throw new CoordsNotInGridException();
+            throw new CoordsNotInGridException();
         }
+        
         $this->fields->hit($coords);
     }
 
-    public function didShipSankAt($coords)
+    /**
+     * @param Coords $coords
+     * @return bool
+     */
+    public function didShipSankAt(Coords $coords)
     {
         return $this->fields->didShipSankAt($coords);
     }

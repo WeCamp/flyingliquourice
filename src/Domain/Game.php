@@ -2,8 +2,6 @@
 
 namespace Wecamp\FlyingLiqourice\Domain;
 
-use Wecamp\FlyingLiqourice\Domain\Game\FieldAlreadyBeenHitException;
-use Wecamp\FlyingLiqourice\Domain\Game\CoordsNotInGridException;
 use Wecamp\FlyingLiqourice\Domain\Game\FireResult;
 
 final class Game

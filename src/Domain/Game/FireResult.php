@@ -8,17 +8,21 @@ use Assert\Assertion;
 
 class FireResult
 {
-    /*
+    const MISS = 'MISS';
+    const HIT = 'HIT';
+
+    /**
      * @var string
      */
     private $result;
 
-    CONST MISS = 'MISS';
-    CONST HIT = 'HIT';
-
+    /**
+     * @param string $result
+     */
     private function __construct($result)
     {
         Assertion::choice($result, [static::HIT, static::MISS]);
+
         $this->result = $result;
     }
 
@@ -38,6 +42,9 @@ class FireResult
         return new static(static::HIT);
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->result;

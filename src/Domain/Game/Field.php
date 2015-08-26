@@ -7,7 +7,7 @@ use Wecamp\FlyingLiqourice\Domain\Coords;
 
 class Field
 {
-    /*
+    /**
      * @var Coords
      */
     private $coords;
@@ -32,9 +32,10 @@ class Field
     }
 
     /**
-     * @param integer $x
-     * @param integer $y
-     * @param boolean $occupiedByShip
+     * @param int $x
+     * @param int $y
+     * @param Ship|null $ship
+     * @param bool $hit
      * @return static
      */
     public static function generate($x, $y, Ship $ship = null, $hit = false)
@@ -61,10 +62,10 @@ class Field
     public function toArray()
     {
         return [
-            'x'=>$this->coords->x(),
-            'y'=>$this->coords->y(),
-            'ship'=>$this->ship->toArray(),
-            'hit'=>$this->hit
+            'x' => $this->coords->x(),
+            'y' => $this->coords->y(),
+            'ship' => $this->ship->toArray(),
+            'hit' => $this->hit
         ];
     }
 
@@ -87,16 +88,21 @@ class Field
 
     public function hit()
     {
-        if($this->hit) {
-            Throw new FieldAlreadyBeenHitException();
+        if ($this->hit) {
+            throw new FieldAlreadyBeenHitException();
         }
+
         $this->hit = true;
         if (!$this->occupied()) {
             return;
         }
+
         $this->ship->hit();
     }
 
+    /**
+     * @return bool
+     */
     public function hasSunkenShip()
     {
         return ($this->occupied() && $this->ship->hasSunk());

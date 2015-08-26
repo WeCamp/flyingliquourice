@@ -1,18 +1,20 @@
 <?php
 
-
 namespace Wecamp\FlyingLiqourice\Domain\Game;
 
-
 use Assert\Assertion;
+use Wecamp\FlyingLiqourice\Domain\Coords;
 
 class Fields implements \IteratorAggregate
 {
-    /*
+    /**
      * @var Field[]
      */
     private $elements;
 
+    /**
+     * @param Field[] $elements
+     */
     private function __construct(array $elements)
     {
         Assertion::allIsInstanceOf($elements, Field::class);
@@ -20,6 +22,9 @@ class Fields implements \IteratorAggregate
         $this->elements = $elements;
     }
 
+    /**
+     * @return \ArrayIterator
+     */
     public function getIterator()
     {
         return new \ArrayIterator($this->elements);
@@ -87,7 +92,6 @@ class Fields implements \IteratorAggregate
         }
     }
 
-
     /**
      * @param Coords $coords
      * @return bool
@@ -102,6 +106,4 @@ class Fields implements \IteratorAggregate
         }
         return false;
     }
-
-
 }

@@ -65,9 +65,11 @@ class Ship
         $this->hits++;
     }
 
+    /**
+     * @return bool
+     */
     public function hasSunk()
     {
         return ($this->hits === $this->size);
     }
-
 }
