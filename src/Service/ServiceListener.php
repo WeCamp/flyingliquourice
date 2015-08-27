@@ -2,7 +2,7 @@
 
 namespace Wecamp\FlyingLiqourice\Service;
 
-use Wecamp\FlyingLiqourice\Domain\Coords;
+use Wecamp\FlyingLiqourice\Domain\Game\Coords;
 use Wecamp\FlyingLiqourice\Domain\Game;
 use Wecamp\FlyingLiqourice\Domain\GameIdentifier;
 use Wecamp\FlyingLiqourice\Storage\SqliteGameRepository;
@@ -99,7 +99,7 @@ class ServiceListener
 
         $this->id = $game->id();
         $result = 'STARTED ' . $game->id();
-
+        echo (string) $game;
         $this->repository()->save($game);
 
         return $result;
@@ -116,6 +116,7 @@ class ServiceListener
 
         $result = 'STATUS ' . json_encode($game->toArray());
         echo 'Get game status: ' . $game->id() . PHP_EOL;
+        echo (string) $game;
         return $result;
     }
 
@@ -128,8 +129,11 @@ class ServiceListener
         $identifier = GameIdentifier::fromString($this->id());
         $game = $this->repository()->get($identifier);
 
+        $game->quit();
+        $this->repository()->save($game);
         $result = 'LOST ' . $game->id();
         echo 'Quitting game ' . $game->id() . PHP_EOL;
+        echo (string) $game;
         return $result;
     }
 
@@ -143,11 +147,23 @@ class ServiceListener
         $identifier = GameIdentifier::fromString($this->id());
         $game = $this->repository()->get($identifier);
         $coordElements = explode('.', $location);
-        $coords = Coords::fromArray(['x' => (int) $coordElements[0], 'y' => (int) $coordElements[1]]);
+        $coords = Coords::create((int) $coordElements[0], (int) $coordElements[1]);
         $result = $game->fire($coords);
         $this->repository()->save($game);
 
         echo 'Firing on ' . $location . ' in game: ' . $game->id() . PHP_EOL;
+        echo (string) $game;
+        return $result;
+    }
+
+    protected function field()
+    {
+        $identifier = GameIdentifier::fromString($this->id());
+        $game = $this->repository()->get($identifier);
+
+        $this->repository()->save($game);
+        $result = 'FIELD ' . $game->id() . PHP_EOL;
+        $result .= (string) $game;
         return $result;
     }
 }
