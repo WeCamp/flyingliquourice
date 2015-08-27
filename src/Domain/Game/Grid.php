@@ -88,13 +88,13 @@ class Grid
     {
         $x = $coords->x();
 
-        if ($x < 0 || $x > $this->width) {
+        if ($x < 0 || $x >= $this->width) {
             return false;
         }
 
         $y = $coords->y();
 
-        if ($y < 0 || $y > $this->height) {
+        if ($y < 0 || $y >= $this->height) {
             return false;
         }
 

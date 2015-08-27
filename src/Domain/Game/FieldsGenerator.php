@@ -6,6 +6,8 @@ use Assert\Assertion;
 
 final class FieldsGenerator
 {
+    const MAX_ATTEMPTS = 1000;
+
     /**
      * @param int $width
      * @param int $height
@@ -27,8 +29,12 @@ final class FieldsGenerator
         $fields = Fields::create($elements);
 
         foreach ($shipSizes as $shipSize) {
-            // Pick a random coordinate
+            $attempts = 0;
             while (true) {
+                if ($attempts == static::MAX_ATTEMPTS) {
+                    throw new CannotPlaceShipOnGridException();
+                }
+
                 $direction = (mt_rand(0, 1) == 0) ? 'right' : 'below';
                 $spot = Coords::create(
                     mt_rand(0, $width - 1),
@@ -37,6 +43,7 @@ final class FieldsGenerator
 
                 $endPoint = static::validEndpoint($fields, $spot, $shipSize, $direction);
                 if ($endPoint === null) {
+                    $attempts++;
                     continue;
                 }
 
@@ -59,16 +66,20 @@ final class FieldsGenerator
             return;
         }
 
-        if (!$fields->hasAt($spot->$direction($shipSize))) {
+        if (!$fields->hasAt($spot->$direction($shipSize - 1))) {
             return;
         }
 
         $neighbour = null;
-        for ($i = 1; $i <= $shipSize; $i++) {
+        for ($i = 1; $i < $shipSize; $i++) {
             $neighbour = $fields->at($spot->$direction($i));
             if ($neighbour->occupied()) {
                 return;
             }
+        }
+
+        if ($neighbour === null) {
+            return;
         }
 
         return $neighbour->coords();
