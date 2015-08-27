@@ -33,7 +33,7 @@ final class SqliteGameRepository implements DomainGameRepository
                 ':data' => json_encode($game->toArray())
             ]
         );
-        $stmt = $this->pdo->prepare('UPDATE games SET data = :data WHERE id = :id ');
+        $stmt = $this->pdo->prepare('UPDATE games SET data = :data WHERE id = :id');
         $stmt->execute(
             [
                 ':id' => (string) $game->id(),
@@ -61,5 +61,4 @@ final class SqliteGameRepository implements DomainGameRepository
             )
         );
     }
-
 }

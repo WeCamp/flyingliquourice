@@ -31,13 +31,14 @@ class ServiceListenerTest extends \PHPUnit_Framework_TestCase
         $token = 'START';
         $service = new ServiceListener($token);
 
-        $this->assertStringStartsWith('{"id":"', $service->run());
+        $this->assertStringStartsWith('STARTED ', $service->run());
     }
 
     /**
      * @test
+     * @expectedException \InvalidArgumentException
      */
-    public function it_restarts_a_game()
+    public function it_restarts_a_non_existing_game()
     {
         $id = Uuid::uuid4()->toString();
         $token = 'START ' . $id;
@@ -47,8 +48,9 @@ class ServiceListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \InvalidArgumentException
      */
-    public function it_shows_status_of_game()
+    public function it_shows_status_a_non_existing_of_game()
     {
         $token = 'STATUS';
         $id = Uuid::uuid4()->toString();
@@ -58,6 +60,7 @@ class ServiceListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \InvalidArgumentException
      */
     public function it_quits_a_game()
     {
@@ -69,6 +72,7 @@ class ServiceListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \InvalidArgumentException
      */
     public function it_fires_on_a3()
     {
