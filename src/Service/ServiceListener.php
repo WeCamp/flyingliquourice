@@ -153,6 +153,16 @@ class ServiceListener
         return $result;
     }
 
+    /**
+     * Shortcut for fire
+     * @param $location
+     * @return string
+     */
+    protected function f($location)
+    {
+        return $this->fire($location);
+    }
+
     protected function field()
     {
         $identifier = GameIdentifier::fromString($this->id());
