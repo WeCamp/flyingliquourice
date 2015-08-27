@@ -3,7 +3,6 @@
 namespace Wecamp\FlyingLiqourice\Domain\Game;
 
 use Assert\Assertion;
-use Wecamp\FlyingLiqourice\Domain\Coords;
 
 class Fields implements \IteratorAggregate
 {
@@ -13,13 +12,31 @@ class Fields implements \IteratorAggregate
     private $elements;
 
     /**
-     * @param Field[] $elements
+     * @var Ship[]
      */
-    private function __construct(array $elements)
+    private $ships;
+
+    /**
+     * @param Field[] $fields
+     *
+     * @return static
+     */
+    public static function create(array $fields)
+    {
+        return new static($fields);
+    }
+
+    /**
+     * @param Field[] $elements
+     * @param Ship[] $ships
+     */
+    private function __construct(array $elements, array $ships = [])
     {
         Assertion::allIsInstanceOf($elements, Field::class);
+        Assertion::allIsInstanceOf($ships, Ship::class);
 
         $this->elements = $elements;
+        $this->ships = $ships;
     }
 
     /**
@@ -31,42 +48,23 @@ class Fields implements \IteratorAggregate
     }
 
     /**
+     * @param array $data
+     *
      * @return static
      */
-    public static function generate($width, $height, array $shipSizes)
-    {
-        Assertion::integer($width);
-        Assertion::integer($height);
-        Assertion::allInteger($shipSizes);
-
-        // @Todo Something spiffy to place ships
-        $elements = [];
-        for ($x = 0; $x < $width; $x++) {
-            for ($y = 0; $y < $height; $y++) {
-                $elements[] = Field::generate(
-                    $x,
-                    $y,
-                    Ship::create(
-                        Coords::create($x, $y),
-                        Coords::create($x, $y)
-                    )
-                );
-            }
-        }
-        return new static ($elements);
-    }
-
-    /**
-     * @param array $fields
-     * @return static
-     */
-    public static function fromArray(array $fields)
+    public static function fromArray(array $data)
     {
         $elements = [];
-        foreach ($fields as $field) {
+        foreach ($data['fields'] as $field) {
             $elements[] = Field::fromArray($field);
         }
-        return new static ($elements);
+
+        $ships = [];
+        foreach ($data['ships'] as $ship) {
+            $ships[] = Ship::fromArray($ship);
+        }
+
+        return new static($elements, $ships);
     }
 
     /**
@@ -78,17 +76,25 @@ class Fields implements \IteratorAggregate
         foreach ($this->elements as $element) {
             $fields[] = $element->toArray();
         }
-        return $fields;
+
+        $ships = [];
+        foreach ($this->ships as $ship) {
+            $ships[] = $ship->toArray();
+        }
+
+        return ['fields' => $fields, 'ships' => $ships];
     }
 
     /**
      * @param Coords $coords
      */
-    public function hit(Coords $coords)
+    public function shoot(Coords $coords)
     {
-        foreach($this->elements as $element) {
+        foreach ($this->elements as $element) {
             if ($element->at($coords)) {
                 $element->hit();
+                $element->shoot();
+
                 return;
             }
         }
@@ -96,20 +102,37 @@ class Fields implements \IteratorAggregate
 
     /**
      * @param Coords $coords
+     *
      * @return bool
      */
     public function didShipSankAt(Coords $coords)
     {
-        foreach($this->elements as $element) {
+        foreach ($this->elements as $element) {
             if ($element->at($coords)) {
                 return $element->hasSunkenShip();
             }
         }
+
         return false;
     }
 
     /**
+     * @return bool
+     */
+    public function didAllShipsSink()
+    {
+        foreach ($this->elements as $element) {
+            if ($element->occupied() && !$element->hasSunkenShip()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @param Coords $coords
+     *
      * @return Coords
      */
     public function startPointOfShipAt(Coords $coords)
@@ -123,6 +146,7 @@ class Fields implements \IteratorAggregate
 
     /**
      * @param Coords $coords
+     *
      * @return Coords
      */
     public function endPointOfShipAt(Coords $coords)
@@ -132,5 +156,73 @@ class Fields implements \IteratorAggregate
                 return $element->endPointOfShip();
             }
         }
+    }
+
+    /**
+     * @param Coords $spot
+     *
+     * @return Field
+     */
+    public function at(Coords $spot)
+    {
+        foreach ($this->elements as $field) {
+            if ($field->coords()->equals($spot)) {
+                return $field;
+            }
+        }
+    }
+
+    /**
+     * @param Coords $spot
+     *
+     * @return bool
+     */
+    public function hasAt(Coords $spot)
+    {
+        foreach ($this->elements as $field) {
+            if ($field->coords()->equals($spot)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Ship $ship
+     */
+    public function place(Ship $ship)
+    {
+        foreach ($this->elements as $field) {
+            if ($ship->on($field->coords())) {
+                $field->place($ship);
+            }
+        }
+
+        $this->ships[] = $ship;
+    }
+
+    public function __toString()
+    {
+        $result     = PHP_EOL . '|';
+        $currentRow = 0;
+        foreach ($this->elements as $element) {
+            if ($element->coords()->y() > $currentRow) {
+                $result .= '|' . PHP_EOL . '|';
+                $currentRow++;
+            }
+
+            $result .= (string) $element;
+        }
+
+        return $result . '|' . PHP_EOL;
+    }
+
+    /**
+     * @return Ship[]
+     */
+    public function ships()
+    {
+        return $this->ships;
     }
 }

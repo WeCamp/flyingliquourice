@@ -1,17 +1,15 @@
 <?php
 
-
 namespace Wecamp\FlyingLiqourice\Domain\Game;
 
-
 use Assert\Assertion;
-use Wecamp\FlyingLiqourice\Domain\Coords;
 
 class FireResult
 {
     const MISS = 'MISS';
-    const HIT = 'HIT';
+    const HIT  = 'HIT';
     const SANK = 'SANK';
+    const WIN  = 'WIN';
 
     /**
      * @var string
@@ -35,7 +33,7 @@ class FireResult
      */
     private function __construct($result, Coords $startPoint = null, Coords $endPoint = null)
     {
-        Assertion::choice($result, [static::HIT, static::MISS, static::SANK]);
+        Assertion::choice($result, [static::HIT, static::MISS, static::SANK, static::WIN]);
 
         if ($result == static::SANK) {
             Assertion::notNull($startPoint);
@@ -71,6 +69,16 @@ class FireResult
     public static function sank(Coords $startPoint, Coords $endPoint)
     {
         return new static(static::SANK, $startPoint, $endPoint);
+    }
+
+    /**
+     * @param Coords $startPoint
+     * @param Coords $endPoint
+     * @return static
+     */
+    public static function win(Coords $startPoint, Coords $endPoint)
+    {
+        return new static(static::WIN, $startPoint, $endPoint);
     }
 
     /**
