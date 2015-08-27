@@ -9,13 +9,16 @@ $conns = new \SplObjectStorage();
 $ip = array_key_exists(1, $argv) ? $argv[1] : '127.0.0.1';
 $port = array_key_exists(2, $argv) ? $argv[2] : 1337;
 
-$socket->on('connection', function ($conn) use ($conns) {
+$dbh = new \PDO('sqlite:./data/games');
+$repository = new \Wecamp\FlyingLiqourice\Storage\SqliteGameRepository($dbh);
+
+$socket->on('connection', function ($conn) use ($conns, $repository) {
     $conn->id = '';
     $conns->attach($conn);
-    $conn->on('data', function ($data) use ($conns, $conn) {
+    $conn->on('data', function ($data) use ($conns, $conn, $repository) {
         foreach ($conns as $current) {
             if ($conn === $current) {
-                $service = new \Wecamp\FlyingLiqourice\Service\ServiceListener($data, $conn->id);
+                $service = new \Wecamp\FlyingLiqourice\Service\ServiceListener($data, $conn->id, $repository);
                 try {
                     $current->write($service->run() . PHP_EOL);
                     $conn->id = (string) $service->id();

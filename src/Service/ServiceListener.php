@@ -24,14 +24,13 @@ class ServiceListener
      */
     private $repository;
 
-    public function __construct($token, $id = '')
+    public function __construct($token, $id = '', $repository)
     {
         $this->token = strtolower($token);
 
         $this->id = $id;
 
-        $dbh = new \PDO('sqlite:./data/games');
-        $this->repository = new SqliteGameRepository($dbh);
+        $this->repository = $repository;
     }
 
     /**
