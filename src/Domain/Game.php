@@ -2,7 +2,9 @@
 
 namespace Wecamp\FlyingLiqourice\Domain;
 
+use Wecamp\FlyingLiqourice\Domain\Game\Coords;
 use Wecamp\FlyingLiqourice\Domain\Game\FireResult;
+use Wecamp\FlyingLiqourice\Domain\Game\Grid;
 
 final class Game
 {
@@ -35,7 +37,7 @@ final class Game
      */
     public function fire(Coords $coords)
     {
-        $this->grid->hitAt($coords);
+        $this->grid->shoot($coords);
 
         if (!$this->grid->hasShipAt($coords)) {
             return FireResult::miss();
@@ -93,6 +95,11 @@ final class Game
             'id' => (string) $this->id,
             'grid' => $this->grid->toArray()
         ];
+    }
+
+    public function __toString()
+    {
+        return (string) $this->id() . PHP_EOL . ((string) $this->grid) . PHP_EOL;
     }
 
     /**

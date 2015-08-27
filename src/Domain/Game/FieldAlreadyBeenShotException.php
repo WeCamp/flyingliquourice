@@ -4,7 +4,7 @@
 namespace Wecamp\FlyingLiqourice\Domain\Game;
 
 
-class FieldAlreadyBeenHitException extends GameException
+class FieldAlreadyBeenShotException extends GameException
 {
 
 }

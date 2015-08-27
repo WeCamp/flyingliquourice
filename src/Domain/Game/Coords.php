@@ -1,13 +1,11 @@
 <?php
 
-namespace Wecamp\FlyingLiqourice\Domain;
+namespace Wecamp\FlyingLiqourice\Domain\Game;
 
 use Assert\Assertion;
-use Wecamp\FlyingLiqourice\Domain\Game\CannotCalculateDistanceBetweenDiagonalCoordsException;
 
 class Coords
 {
-
     /**
      * @var int
      */
@@ -93,6 +91,28 @@ class Coords
         }
 
         throw new CannotCalculateDistanceBetweenDiagonalCoordsException();
+    }
+
+    /**
+     * Retrieve the coords a specified distance to the right of these coords.
+     *
+     * @param int $distance
+     * @return Coords
+     */
+    public function right($distance)
+    {
+        return Coords::create($this->x() + $distance, $this->y());
+    }
+
+    /**
+     * Retrieve the coords a specified distance below these coords.
+     *
+     * @param int $distance
+     * @return Coords
+     */
+    public function below($distance)
+    {
+        return Coords::create($this->x(), $this->y() + $distance);
     }
 
     /**
