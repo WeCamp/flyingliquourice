@@ -163,37 +163,37 @@ class Field
     public function __toString()
     {
         if ($this->hit()) {
-            return '🔥';
+            return '🔥 ';
         }
 
         if ($this->miss()) {
-            return '💦';
+            return '💦 ';
         }
 
         if ($this->occupied() && $this->ship->startPoint()->equals($this->coords())) {
             if ($this->ship->startPoint()->x() == $this->ship->endPoint()->x()) {
-                return '^';
+                return '^ ';
             }
 
-            return '<';
+            return '< ';
         }
 
         if ($this->occupied() && $this->ship->endPoint()->equals($this->coords())) {
             if ($this->ship->startPoint()->x() == $this->ship->endPoint()->x()) {
-                return 'v';
+                return 'v ';
             }
 
-            return '>';
+            return '> ';
         }
 
         if ($this->occupied()) {
             if ($this->ship->startPoint()->x() == $this->ship->endPoint()->x()) {
-                return 'ǁ';
+                return 'ǁ ';
             }
 
-            return '=';
+            return '= ';
         }
 
-        return ' ';
+        return '  ';
     }
 }
