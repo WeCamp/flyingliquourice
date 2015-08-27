@@ -19,9 +19,8 @@ $socket->on('connection', function ($conn) use ($conns) {
                 try {
                     $current->write($service->run() . PHP_EOL);
                     $conn->id = (string) $service->id();
-
                 } catch (\InvalidArgumentException $e) {
-                    $current->write('ERR You did something wrong' . PHP_EOL);
+                    $current->write('ERROR ' . get_class($e) . PHP_EOL);
                 }
             }
         }

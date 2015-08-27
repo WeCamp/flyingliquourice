@@ -47,7 +47,6 @@ class ServiceListener
             echo 'Re initializing game id: ' . $game->id() . PHP_EOL;
         }
         $tokenized = explode(' ', $this->token);
-        $result = '';
 
         $command = trim($tokenized[0]);
         $argument = '';
@@ -83,7 +82,7 @@ class ServiceListener
      * @param string $id
      * @return string
      */
-    protected function start($id = '')
+    private function start($id = '')
     {
         if (strlen($id) !== 0) {
             $identifier = GameIdentifier::fromString($id);
@@ -95,43 +94,48 @@ class ServiceListener
         }
 
         $this->id = $game->id();
-        $result = 'STARTED ' . $game->id();
-        echo (string) $game;
         $this->repository()->save($game);
 
-        return $result;
+        echo (string) $game;
+        return 'STARTED ' . $game->id();
     }
 
     /**
      * Get the status of the current game
      * @return string
      */
-    protected function status()
+    private function status()
     {
         $identifier = GameIdentifier::fromString($this->id());
         $game = $this->repository()->get($identifier);
 
-        $result = 'STATUS ' . json_encode($game->toArray());
         echo 'Get game status: ' . $game->id() . PHP_EOL;
         echo (string) $game;
-        return $result;
+
+        $result = '';
+        $status = $game->status();
+        foreach ($status as $fireResult) {
+            $result .= '- ' . $fireResult . PHP_EOL;
+        }
+
+        return 'STATUS' . PHP_EOL . $result;
     }
 
     /**
      * Quit the game
      * @return string
      */
-    protected function quit()
+    private function surrender()
     {
         $identifier = GameIdentifier::fromString($this->id());
         $game = $this->repository()->get($identifier);
 
-        $game->quit();
+        $game->surrender();
         $this->repository()->save($game);
-        $result = 'LOST ' . $game->id();
-        echo 'Quitting game ' . $game->id() . PHP_EOL;
+
+        echo 'Surrendering game ' . $game->id() . PHP_EOL;
         echo (string) $game;
-        return $result;
+        return 'LOST ' . $game->id();
     }
 
     /**
@@ -139,13 +143,15 @@ class ServiceListener
      * @param string $location
      * @return string
      */
-    protected function fire($location)
+    private function fire($location)
     {
         $identifier = GameIdentifier::fromString($this->id());
         $game = $this->repository()->get($identifier);
+
         $coordElements = explode('.', $location);
         $coords = Coords::create((int) $coordElements[0], (int) $coordElements[1]);
         $result = $game->fire($coords);
+
         $this->repository()->save($game);
 
         echo 'Firing on ' . $location . ' in game: ' . $game->id() . PHP_EOL;
@@ -153,14 +159,12 @@ class ServiceListener
         return $result;
     }
 
-    protected function field()
+    private function field()
     {
         $identifier = GameIdentifier::fromString($this->id());
         $game = $this->repository()->get($identifier);
 
         $this->repository()->save($game);
-        $result = 'FIELD ' . $game->id() . PHP_EOL;
-        $result .= (string) $game;
-        return $result;
+        return 'FIELD ' . PHP_EOL . $game;
     }
 }
