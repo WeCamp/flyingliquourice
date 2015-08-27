@@ -8,7 +8,6 @@ use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
 
-
 $loop = IoServer::factory(
     new HttpServer(
         new WsServer(
