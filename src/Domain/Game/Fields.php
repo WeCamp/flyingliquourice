@@ -54,14 +54,23 @@ class Fields implements \IteratorAggregate
      */
     public static function fromArray(array $data)
     {
-        $elements = [];
-        foreach ($data['fields'] as $field) {
-            $elements[] = Field::fromArray($field);
-        }
-
         $ships = [];
         foreach ($data['ships'] as $ship) {
             $ships[] = Ship::fromArray($ship);
+        }
+
+        $elements = [];
+        foreach ($data['fields'] as $field) {
+            $field = Field::fromArray($field);
+
+            /** @var Ship $ship */
+            foreach ($ships as $ship) {
+                if ($ship->on($field->coords())) {
+                    $field->place($ship);
+                }
+            }
+
+            $elements[] = $field;
         }
 
         return new static($elements, $ships);

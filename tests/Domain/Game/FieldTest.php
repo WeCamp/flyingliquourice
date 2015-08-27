@@ -15,7 +15,10 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
             'hits'          => 3
         ];
         $ship = Ship::fromArray($data);
-        $field = Field::generate(1, 1, $ship);
+
+        $field = Field::generate(1, 1);
+        $field->place($ship);
+
         $this->assertEquals(true, $field->occupied());
         $this->assertEquals(true, $field->hasSunkenShip());
     }
@@ -31,7 +34,8 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
             'hits'          => 1
         ];
         $ship = Ship::fromArray($data);
-        $field = Field::generate(1, 1, $ship);
+        $field = Field::generate(1, 1);
+        $field->place($ship);
         $this->assertEquals(true, $field->occupied());
         $this->assertEquals(false, $field->hasSunkenShip());
     }
@@ -68,7 +72,8 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
             'hits'          => 2
         ];
         $ship = Ship::fromArray($data);
-        $field = Field::generate(1, 1, $ship);
+        $field = Field::generate(1, 1);
+        $field->place($ship);
         $this->assertEquals(true, $field->occupied());
         $this->assertEquals(false, $field->hasSunkenShip());
 
@@ -88,7 +93,9 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
             'hits'          => 2
         ];
         $ship = Ship::fromArray($data);
-        $field = Field::generate(1, 1, $ship, true);
+        $field = Field::generate(1, 1);
+        $field->shoot();
+        $field->place($ship);
         $this->setExpectedException(FieldAlreadyBeenShotException::class);
 
         $field->shoot();
