@@ -109,7 +109,7 @@ final class Game
     /**
      * @return Game\Ship[]
      */
-    public function quit()
+    public function surrender()
     {
         $this->lock();
 
