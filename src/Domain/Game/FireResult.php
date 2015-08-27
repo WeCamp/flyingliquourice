@@ -116,8 +116,8 @@ class FireResult
         return [
             'result'     => $this->result,
             'target'     => $this->target->toArray(),
-            'startPoint' => $this->startPoint->toArray(),
-            'endPoint'   => $this->endPoint->toArray(),
+            'startPoint' => (is_object($this->startPoint) ? $this->startPoint->toArray() : []),
+            'endPoint'   => (is_object($this->endPoint) ? $this->endPoint->toArray() : []),
         ];
     }
 
@@ -131,8 +131,8 @@ class FireResult
         return new static(
             $fireResult['result'],
             Coords::fromArray($fireResult['target']),
-            Coords::fromArray($fireResult['startPoint']),
-            Coords::fromArray($fireResult['endPoint'])
+            (array_key_exists('x',$fireResult['startPoint']) ? Coords::fromArray($fireResult['startPoint']) : null),
+            (array_key_exists('y', $fireResult['endPoint']) ? Coords::fromArray($fireResult['endPoint']) : null)
         );
     }
 

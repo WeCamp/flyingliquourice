@@ -12,34 +12,31 @@ class Field
     private $coords;
 
     /**
-     * @var Ship
-     */
-    private $ship;
-
-    /**
      * @var boolean
      */
     private $shot;
 
-    private function __construct(Coords $coords, Ship $ship = null, $shot = false)
+    /**
+     * @var Ship
+     */
+    private $ship;
+
+    private function __construct(Coords $coords, $shot = false)
     {
         Assertion::boolean($shot);
 
         $this->coords = $coords;
-        $this->ship = $ship;
         $this->shot = $shot;
     }
 
     /**
      * @param int $x
      * @param int $y
-     * @param Ship|null $ship
-     * @param bool $shot
      * @return static
      */
-    public static function generate($x, $y, Ship $ship = null, $shot = false)
+    public static function generate($x, $y)
     {
-        return new static(Coords::create($x, $y), $ship, $shot);
+        return new static(Coords::create($x, $y));
     }
 
     /**
@@ -50,7 +47,6 @@ class Field
     {
         return new static(
             Coords::fromArray($field['coords']),
-            ($field['ship'] !== null) ? Ship::fromArray($field['ship']) : null,
             $field['shot']
         );
     }
@@ -62,7 +58,6 @@ class Field
     {
         return [
             'coords' => $this->coords->toArray(),
-            'ship' => $this->occupied() ? $this->ship->toArray() : null,
             'shot' => $this->shot
         ];
     }

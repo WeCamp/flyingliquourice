@@ -58,8 +58,13 @@ final class FieldsTest extends \PHPUnit_Framework_TestCase
         ];
         $ship = Ship::fromArray($data);
 
-        $fields[] = Field::generate(1, 1, $ship);
-        $fields[] = Field::generate(1, 2, $ship);
+        $field = Field::generate(1, 1);
+        $field->place($ship);
+        $fields[] = $field;
+
+        $field = Field::generate(1, 2);
+        $field->place($ship);
+        $fields[] = $field;
 
         $fieldsClass = Fields::create($fields);
 
@@ -84,8 +89,13 @@ final class FieldsTest extends \PHPUnit_Framework_TestCase
         ];
         $ship = Ship::fromArray($data);
 
-        $fields[] = Field::generate(0, 0, $ship);
-        $fields[] = Field::generate(0, 1, $ship);
+        $field = Field::generate(0, 0);
+        $field->place($ship);
+        $fields[] = $field;
+
+        $field = Field::generate(0, 1);
+        $field->place($ship);
+        $fields[] = $field;
 
         $data = [
             'startPoint' => ['x' => 1, 'y' => 0],
@@ -94,8 +104,13 @@ final class FieldsTest extends \PHPUnit_Framework_TestCase
         ];
         $ship = Ship::fromArray($data);
 
-        $fields[] = Field::generate(1, 0, $ship);
-        $fields[] = Field::generate(1, 1, $ship);
+        $field = Field::generate(1, 0);
+        $field->place($ship);
+        $fields[] = $field;
+
+        $field = Field::generate(1, 1);
+        $field->place($ship);
+        $fields[] = $field;
 
         $fieldsClass = Fields::create($fields);
 
@@ -121,8 +136,13 @@ final class FieldsTest extends \PHPUnit_Framework_TestCase
         ];
         $ship = Ship::fromArray($data);
 
-        $fields[] = Field::generate(1, 1, $ship);
-        $fields[] = Field::generate(1, 2, $ship);
+        $field = Field::generate(1, 1);
+        $field->place($ship);
+        $fields[] = $field;
+
+        $field = Field::generate(1, 2);
+        $field->place($ship);
+        $fields[] = $field;
 
         $fieldsClass = Fields::create($fields);
 
