@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/WeCamp/flyingliquourice.svg?branch=travis)](https://travis-ci.org/WeCamp/flyingliquourice)
+[![StyleCI](https://styleci.io/repos/41369464/shield)](https://styleci.io/repos/41369464)
 
 # FLYING LIQUOURICE
 
