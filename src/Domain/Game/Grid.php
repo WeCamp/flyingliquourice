@@ -1,11 +1,8 @@
 <?php
 
-namespace Wecamp\FlyingLiqourice\Domain;
+namespace Wecamp\FlyingLiqourice\Domain\Game;
 
 use Assert\Assertion;
-use Wecamp\FlyingLiqourice\Domain\Game\CoordsNotInGridException;
-use Wecamp\FlyingLiqourice\Domain\Game\Field;
-use Wecamp\FlyingLiqourice\Domain\Game\Fields;
 
 class Grid
 {
@@ -59,7 +56,11 @@ class Grid
         return new static(
             static::DEFAULT_WIDTH,
             static::DEFAULT_HEIGHT,
-            Fields::generate(static::DEFAULT_WIDTH, static::DEFAULT_HEIGHT, static::$defaultShipSizes)
+            FieldsGenerator::generate(
+                static::DEFAULT_WIDTH,
+                static::DEFAULT_HEIGHT,
+                static::$defaultShipSizes
+            )
         );
     }
 
@@ -113,11 +114,11 @@ class Grid
     /**
      * @param Coords $coords
      */
-    public function hitAt(Coords $coords)
+    public function shoot(Coords $coords)
     {
         $this->ensureCoordsInGrid($coords);
 
-        $this->fields->hit($coords);
+        $this->fields->shoot($coords);
     }
 
     /**
@@ -151,6 +152,14 @@ class Grid
         $this->ensureCoordsInGrid($coords);
 
         return $this->fields->endPointOfShipAt($coords);
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->fields;
     }
 
     /**

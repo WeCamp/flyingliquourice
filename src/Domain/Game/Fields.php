@@ -3,7 +3,6 @@
 namespace Wecamp\FlyingLiqourice\Domain\Game;
 
 use Assert\Assertion;
-use Wecamp\FlyingLiqourice\Domain\Coords;
 
 class Fields implements \IteratorAggregate
 {
@@ -11,6 +10,16 @@ class Fields implements \IteratorAggregate
      * @var Field[]
      */
     private $elements;
+
+    /**
+     * @param Field[] $fields
+     *
+     * @return static
+     */
+    public static function create(array $fields)
+    {
+        return new static($fields);
+    }
 
     /**
      * @param Field[] $elements
@@ -92,11 +101,12 @@ class Fields implements \IteratorAggregate
     /**
      * @param Coords $coords
      */
-    public function hit(Coords $coords)
+    public function shoot(Coords $coords)
     {
         foreach ($this->elements as $element) {
             if ($element->at($coords)) {
                 $element->hit();
+                $element->shoot();
 
                 return;
             }
@@ -159,5 +169,63 @@ class Fields implements \IteratorAggregate
                 return $element->endPointOfShip();
             }
         }
+    }
+
+    /**
+     * @param Coords $spot
+     *
+     * @return Field
+     */
+    public function at(Coords $spot)
+    {
+        foreach ($this->elements as $field) {
+            if ($field->coords()->equals($spot)) {
+                return $field;
+            }
+        }
+    }
+
+    /**
+     * @param Coords $spot
+     *
+     * @return bool
+     */
+    public function hasAt(Coords $spot)
+    {
+        foreach ($this->elements as $field) {
+            if ($field->coords()->equals($spot)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Ship $ship
+     */
+    public function place(Ship $ship)
+    {
+        foreach ($this->elements as $field) {
+            if ($ship->on($field->coords())) {
+                $field->place($ship);
+            }
+        }
+    }
+
+    public function __toString()
+    {
+        $result     = PHP_EOL . '|';
+        $currentRow = 0;
+        foreach ($this->elements as $element) {
+            if ($element->coords()->y() > $currentRow) {
+                $result .= '|' . PHP_EOL . '|';
+                $currentRow++;
+            }
+
+            $result .= (string) $element;
+        }
+
+        return $result . '|' . PHP_EOL;
     }
 }
