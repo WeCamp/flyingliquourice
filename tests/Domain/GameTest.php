@@ -4,6 +4,7 @@ namespace Wecamp\FlyingLiqourice\Domain;
 
 use Wecamp\FlyingLiqourice\Domain\Game\Coords;
 use Wecamp\FlyingLiqourice\Domain\Game\FireResult;
+use Wecamp\FlyingLiqourice\Domain\Game\GameIsLockedException;
 
 final class GameTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,5 +52,31 @@ final class GameTest extends \PHPUnit_Framework_TestCase
         $game = Game::create(10, 10);
 
         $this->assertSame(269, mb_strlen((string) $game));
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_not_allow_to_fire_in_a_locked_game()
+    {
+        $game = Game::create();
+        $game->surrender();
+
+        $this->setExpectedException(GameIsLockedException::class);
+        $game->fire(Coords::create(1, 1));
+    }
+
+    /**
+     * @test
+     */
+    public function it_should_win_the_game_when_all_ships_have_sunk()
+    {
+        $game = Game::create(1, 2, [2]);
+
+        $result = $game->fire(Coords::fromArray(['x' => 0, 'y' => 0]));
+        $this->assertFalse($result->isWon());
+
+        $result  = $game->fire(Coords::fromArray(['x' => 0, 'y' => 1]));
+        $this->assertTrue($result->isWon());
     }
 }

@@ -66,7 +66,7 @@ final class FieldsGenerator
             return;
         }
 
-        if (!$fields->hasAt($spot->$direction($shipSize))) {
+        if (!$fields->hasAt($spot->$direction($shipSize - 1))) {
             return;
         }
 
@@ -76,6 +76,10 @@ final class FieldsGenerator
             if ($neighbour->occupied()) {
                 return;
             }
+        }
+
+        if ($neighbour === null) {
+            return;
         }
 
         return $neighbour->coords();

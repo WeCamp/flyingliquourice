@@ -107,4 +107,37 @@ class FireResult
 
         return $this->result;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'result'     => $this->result,
+            'target'     => $this->target->toArray(),
+            'startPoint' => $this->startPoint->toArray(),
+            'endPoint'   => $this->endPoint->toArray(),
+        ];
+    }
+
+    /**
+     * @param array $fireResult
+     *
+     * @return static
+     */
+    public static function fromArray(array $fireResult)
+    {
+        return new static(
+            $fireResult['result'],
+            Coords::fromArray($fireResult['target']),
+            Coords::fromArray($fireResult['startPoint']),
+            Coords::fromArray($fireResult['endPoint'])
+        );
+    }
+
+    public function isWon()
+    {
+        return $this->result === static::WIN;
+    }
 }

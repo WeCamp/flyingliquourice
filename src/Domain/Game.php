@@ -33,8 +33,8 @@ final class Game
     /**
      * Creates a new game.
      *
-     * @param int $width
-     * @param int $height
+     * @param int   $width
+     * @param int   $height
      * @param array $shipSizes
      *
      * @return static
@@ -49,6 +49,7 @@ final class Game
 
     /**
      * @param Coords $coords
+     *
      * @return FireResult
      */
     public function fire(Coords $coords)
@@ -59,7 +60,7 @@ final class Game
 
         $this->grid->shoot($coords);
         if (!$this->grid->hasShipAt($coords)) {
-            $miss = FireResult::miss($coords);
+            $miss                = FireResult::miss($coords);
             $this->fireResults[] = $miss;
 
             return $miss;
@@ -125,9 +126,15 @@ final class Game
      */
     public static function fromArray(array $data)
     {
+        $fireResults = [];
+        foreach ($data['fireResults'] as $fireResult) {
+            $fireResults[] = FireResult::fromArray($fireResult);
+        }
+
         return new static(
             GameIdentifier::fromString($data['id']),
             Grid::fromArray($data['grid']),
+            $fireResults,
             $data['locked']
         );
     }
@@ -149,10 +156,16 @@ final class Game
      */
     public function toArray()
     {
+        $fireResults = [];
+        foreach ($this->fireResults as $fireResult) {
+            $fireResults[] = $fireResult->toArray();
+        }
+
         return [
-            'id' => (string) $this->id,
-            'grid' => $this->grid->toArray(),
-            'locked' => $this->locked
+            'id'          => (string) $this->id,
+            'grid'        => $this->grid->toArray(),
+            'fireResults' => $fireResults,
+            'locked'      => $this->locked
         ];
     }
 
@@ -162,17 +175,20 @@ final class Game
     }
 
     /**
-     * @param Identifier $id
-     * @param Grid $grid
-     * @param bool $locked
+     * @param Identifier   $id
+     * @param Grid         $grid
+     * @param FireResult[] $fireResults
+     * @param bool         $locked
      */
-    private function __construct(Identifier $id, Grid $grid, $locked = false)
+    private function __construct(Identifier $id, Grid $grid, array $fireResults = [], $locked = false)
     {
         Assertion::boolean($locked);
+        Assertion::allIsInstanceOf($fireResults, FireResult::class);
 
-        $this->id = $id;
-        $this->grid = $grid;
-        $this->locked = $locked;
+        $this->id          = $id;
+        $this->grid        = $grid;
+        $this->fireResults = $fireResults;
+        $this->locked      = $locked;
     }
 
     private function lock()

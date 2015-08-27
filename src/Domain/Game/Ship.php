@@ -7,7 +7,7 @@ use Assert\Assertion;
 
 class Ship
 {
-    const MINIMUM_SIZE = 1;
+    const MINIMUM_SIZE = 2;
 
     /**
      * @var Coords
