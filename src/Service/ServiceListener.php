@@ -139,6 +139,16 @@ class ServiceListener
     }
 
     /**
+     * Shortcut for fire
+     * @param $location
+     * @return string
+     */
+    private function f($location)
+    {
+        return $this->fire($location);
+    }
+
+    /**
      * fire on $location
      * @param string $location
      * @return string
