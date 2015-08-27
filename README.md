@@ -9,6 +9,5 @@
 
 ## Running
 
-* Set your ip and port in ./bin/battleship.php
-* `php ./bin/battleship.php`
+* run `php ./bin/battleship.php [ip] [port]` ([ip] and [port] are optional and default to 127.0.0.1 and 1337)
 * connect to your ip and port using telnet: `telnet [ip] [port]`
