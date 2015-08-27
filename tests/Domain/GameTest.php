@@ -29,7 +29,7 @@ final class GameTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_sinks_a_ship()
+    public function it_wins_the_game()
     {
         $gridData = [
             'fields' => [
@@ -38,34 +38,12 @@ final class GameTest extends \PHPUnit_Framework_TestCase
                         'x' => 0,
                         'y' => 0
                     ],
-                    'ship' => [
-                        'startPoint' => [
-                            'x' => 0,
-                            'y' => 0
-                        ],
-                        'endPoint' => [
-                            'x' => 0,
-                            'y' => 1
-                        ],
-                        'hits' => 0
-                    ],
                     'shot' => false
                 ],
                 [
                     'coords' => [
                         'x' => 0,
                         'y' => 1
-                    ],
-                    'ship' => [
-                        'startPoint' => [
-                            'x' => 0,
-                            'y' => 0
-                        ],
-                        'endPoint' => [
-                            'x' => 0,
-                            'y' => 1
-                        ],
-                        'hits' => 0
                     ],
                     'shot' => false
                 ]
@@ -90,15 +68,95 @@ final class GameTest extends \PHPUnit_Framework_TestCase
             'height' => 10,
             'fields' => $gridData
         ];
-        $gameData = ['id' => Uuid::uuid4()->toString(), 'locked' => false, 'grid' => $data];
+
+        $gameData = ['id' => Uuid::uuid4()->toString(), 'locked' => false, 'grid' => $data, 'fireResults' => []];
         $game = Game::fromArray($gameData);
         $result = $game->fire(Coords::create(0, 0));
 
-        $this->assertEquals('HIT', (string)$result);
+        $this->assertEquals('HIT 0.0', (string)$result);
 
         $result = $game->fire(Coords::create(0, 1));
 
-        $this->assertEquals('SINK', (string)$result);
+        $this->assertEquals('WIN 0.1 0.0 0.1', (string)$result);
+    }
+
+    /**
+     * @test
+     */
+    public function it_sinks_a_ship()
+    {
+        $gridData = [
+            'fields' => [
+                [
+                    'coords' => [
+                        'x' => 0,
+                        'y' => 0
+                    ],
+                    'shot' => false
+                ],
+                [
+                    'coords' => [
+                        'x' => 0,
+                        'y' => 1
+                    ],
+                    'shot' => false
+                ],
+                [
+                    'coords' => [
+                        'x' => 1,
+                        'y' => 0
+                    ],
+                    'shot' => false
+                ],
+                [
+                    'coords' => [
+                        'x' => 1,
+                        'y' => 1
+                    ],
+                    'shot' => false
+                ]
+            ],
+            'ships' => [
+                [
+                    'startPoint' => [
+                        'x' => 0,
+                        'y' => 0
+                    ],
+                    'endPoint' => [
+                        'x' => 0,
+                        'y' => 1
+                    ],
+                    'hits' => 0
+                ],
+                [
+                    'startPoint' => [
+                        'x' => 1,
+                        'y' => 0
+                    ],
+                    'endPoint' => [
+                        'x' => 1,
+                        'y' => 1
+                    ],
+                    'hits' => 0
+                ]
+            ]
+        ];
+
+        $data = [
+            'width' => 10,
+            'height' => 10,
+            'fields' => $gridData
+        ];
+
+        $gameData = ['id' => Uuid::uuid4()->toString(), 'locked' => false, 'grid' => $data, 'fireResults' => []];
+        $game = Game::fromArray($gameData);
+        $result = $game->fire(Coords::create(0, 0));
+
+        $this->assertEquals('HIT 0.0', (string)$result);
+
+        $result = $game->fire(Coords::create(0, 1));
+
+        $this->assertEquals('SANK 0.1 0.0 0.1', (string)$result);
     }
 
     public function it_should_return_the_fire_results_in_the_correct_order()
