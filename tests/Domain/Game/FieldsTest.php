@@ -16,7 +16,6 @@ final class FieldsTest extends \PHPUnit_Framework_TestCase
 
         $fieldsClass = Fields::create($fields);
 
-
         $fieldsClass->shoot(Coords::create(1, 1));
 
         $this->assertEquals(false, $fieldsClass->didShipSankAt(Coords::create(1, 1)));
@@ -79,30 +78,33 @@ final class FieldsTest extends \PHPUnit_Framework_TestCase
         $fields = [];
 
         $data = [
-            'startPoint' => ['x' => 1, 'y' => 1],
+            'startPoint' => ['x' => 0, 'y' => 0],
+            'endPoint' => ['x' => 0, 'y' => 1],
+            'hits' => 0
+        ];
+        $ship = Ship::fromArray($data);
+
+        $fields[] = Field::generate(0, 0, $ship);
+        $fields[] = Field::generate(0, 1, $ship);
+
+        $data = [
+            'startPoint' => ['x' => 1, 'y' => 0],
             'endPoint' => ['x' => 1, 'y' => 1],
             'hits' => 0
         ];
         $ship = Ship::fromArray($data);
 
+        $fields[] = Field::generate(1, 0, $ship);
         $fields[] = Field::generate(1, 1, $ship);
-
-        $data = [
-            'startPoint' => ['x' => 1, 'y' => 2],
-            'endPoint' => ['x' => 1, 'y' => 2],
-            'hits' => 0
-        ];
-        $ship = Ship::fromArray($data);
-
-        $fields[] = Field::generate(1, 2, $ship);
 
         $fieldsClass = Fields::create($fields);
 
-        $fieldsClass->shoot(Coords::create(1, 1));
+        $fieldsClass->shoot(Coords::create(0, 0));
+        $fieldsClass->shoot(Coords::create(0, 1));
 
-        $this->assertEquals(true, $fieldsClass->didShipSankAt(Coords::create(1, 1)));
+        $this->assertTrue($fieldsClass->didShipSankAt(Coords::create(0, 1)));
 
-        $this->assertEquals(false, $fieldsClass->didAllShipsSink());
+        $this->assertFalse($fieldsClass->didAllShipsSink());
     }
 
     /**

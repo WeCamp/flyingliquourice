@@ -17,6 +17,11 @@ class FireResult
     private $result;
 
     /**
+     * @var Coords
+     */
+    private $target;
+
+    /**
      * @var Coords|null
      */
     private $startPoint;
@@ -28,57 +33,67 @@ class FireResult
 
     /**
      * @param string $result
+     * @param Coords $target
      * @param Coords $startPoint
      * @param Coords $endPoint
      */
-    private function __construct($result, Coords $startPoint = null, Coords $endPoint = null)
+    private function __construct($result, Coords $target, Coords $startPoint = null, Coords $endPoint = null)
     {
         Assertion::choice($result, [static::HIT, static::MISS, static::SANK, static::WIN]);
 
-        if ($result == static::SANK) {
+        if (in_array($result, [static::SANK, static::WIN])) {
             Assertion::notNull($startPoint);
             Assertion::notNull($endPoint);
         }
 
-        $this->result = $result;
+        $this->result     = $result;
         $this->startPoint = $startPoint;
-        $this->endPoint = $endPoint;
+        $this->endPoint   = $endPoint;
+        $this->target     = $target;
     }
 
     /**
+     * @param Coords $target
+     *
      * @return static
      */
-    public static function miss()
+    public static function miss(Coords $target)
     {
-        return new static(static::MISS);
+        return new static(static::MISS, $target);
     }
 
     /**
+     * @param Coords $target
+     *
      * @return static
      */
-    public static function hit()
+    public static function hit(Coords $target)
     {
-        return new static(static::HIT);
+        return new static(static::HIT, $target);
     }
 
     /**
+     * @param Coords $target
      * @param Coords $startPoint
      * @param Coords $endPoint
+     *
      * @return static
      */
-    public static function sank(Coords $startPoint, Coords $endPoint)
+    public static function sank(Coords $target, Coords $startPoint, Coords $endPoint)
     {
-        return new static(static::SANK, $startPoint, $endPoint);
+        return new static(static::SANK, $target, $startPoint, $endPoint);
     }
 
     /**
+     * @param Coords $target
      * @param Coords $startPoint
      * @param Coords $endPoint
+     *
      * @return static
      */
-    public static function win(Coords $startPoint, Coords $endPoint)
+    public static function win(Coords $target, Coords $startPoint, Coords $endPoint)
     {
-        return new static(static::WIN, $startPoint, $endPoint);
+        return new static(static::WIN, $target, $startPoint, $endPoint);
     }
 
     /**
@@ -86,10 +101,43 @@ class FireResult
      */
     public function __toString()
     {
-        if ($this->result == static::SANK) {
-            return $this->result . ' ' . ((string) $this->startPoint) . ' ' . ((string) $this->endPoint);
+        if (in_array($this->result, [static::SANK, static::WIN])) {
+            return $this->result . ' ' . (string) $this->target . ' ' . ((string) $this->startPoint) . ' ' . ((string) $this->endPoint);
         }
 
         return $this->result;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'result'     => $this->result,
+            'target'     => $this->target->toArray(),
+            'startPoint' => $this->startPoint->toArray(),
+            'endPoint'   => $this->endPoint->toArray(),
+        ];
+    }
+
+    /**
+     * @param array $fireResult
+     *
+     * @return static
+     */
+    public static function fromArray(array $fireResult)
+    {
+        return new static(
+            $fireResult['result'],
+            Coords::fromArray($fireResult['target']),
+            Coords::fromArray($fireResult['startPoint']),
+            Coords::fromArray($fireResult['endPoint'])
+        );
+    }
+
+    public function isWon()
+    {
+        return $this->result === static::WIN;
     }
 }

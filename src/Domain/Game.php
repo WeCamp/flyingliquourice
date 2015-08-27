@@ -11,6 +11,11 @@ use Wecamp\FlyingLiqourice\Domain\Game\Grid;
 final class Game
 {
     /**
+     * @var FireResult[]
+     */
+    private $fireResults = [];
+
+    /**
      * @var Identifier
      */
     private $id;
@@ -28,8 +33,8 @@ final class Game
     /**
      * Creates a new game.
      *
-     * @param int $width
-     * @param int $height
+     * @param int   $width
+     * @param int   $height
      * @param array $shipSizes
      *
      * @return static
@@ -44,6 +49,7 @@ final class Game
 
     /**
      * @param Coords $coords
+     *
      * @return FireResult
      */
     public function fire(Coords $coords)
@@ -53,28 +59,52 @@ final class Game
         }
 
         $this->grid->shoot($coords);
-
         if (!$this->grid->hasShipAt($coords)) {
-            return FireResult::miss();
+            $miss                = FireResult::miss($coords);
+            $this->fireResults[] = $miss;
+
+            return $miss;
         }
 
         if ($this->grid->didAllShipsSink()) {
             $this->lock();
-
-            return FireResult::win(
+            $win = FireResult::win(
+                $coords,
                 $this->grid->startPointOfShipAt($coords),
                 $this->grid->endPointOfShipAt($coords)
             );
+
+            $this->fireResults[] = $win;
+
+            return $win;
         }
 
         if ($this->grid->didShipSankAt($coords)) {
-            return FireResult::sank(
+
+            $sank = FireResult::sank(
+                $coords,
                 $this->grid->startPointOfShipAt($coords),
                 $this->grid->endPointOfShipAt($coords)
             );
+
+            $this->fireResults[] = $sank;
+
+            return $sank;
         }
 
-        return FireResult::hit();
+        $hit = FireResult::hit($coords);
+
+        $this->fireResults[] = $hit;
+
+        return $hit;
+    }
+
+    /**
+     * @return FireResult[]
+     */
+    public function status()
+    {
+        return $this->fireResults;
     }
 
     /**
@@ -91,13 +121,20 @@ final class Game
      * Recreates a game from an array.
      *
      * @param array $data
+     *
      * @return static
      */
     public static function fromArray(array $data)
     {
+        $fireResults = [];
+        foreach ($data['fireResults'] as $fireResult) {
+            $fireResults[] = FireResult::fromArray($fireResult);
+        }
+
         return new static(
             GameIdentifier::fromString($data['id']),
             Grid::fromArray($data['grid']),
+            $fireResults,
             $data['locked']
         );
     }
@@ -119,10 +156,16 @@ final class Game
      */
     public function toArray()
     {
+        $fireResults = [];
+        foreach ($this->fireResults as $fireResult) {
+            $fireResults[] = $fireResult->toArray();
+        }
+
         return [
-            'id' => (string) $this->id,
-            'grid' => $this->grid->toArray(),
-            'locked' => $this->locked
+            'id'          => (string) $this->id,
+            'grid'        => $this->grid->toArray(),
+            'fireResults' => $fireResults,
+            'locked'      => $this->locked
         ];
     }
 
@@ -132,17 +175,20 @@ final class Game
     }
 
     /**
-     * @param Identifier $id
-     * @param Grid $grid
-     * @param bool $locked
+     * @param Identifier   $id
+     * @param Grid         $grid
+     * @param FireResult[] $fireResults
+     * @param bool         $locked
      */
-    private function __construct(Identifier $id, Grid $grid, $locked = false)
+    private function __construct(Identifier $id, Grid $grid, array $fireResults = [], $locked = false)
     {
         Assertion::boolean($locked);
+        Assertion::allIsInstanceOf($fireResults, FireResult::class);
 
-        $this->id = $id;
-        $this->grid = $grid;
-        $this->locked = $locked;
+        $this->id          = $id;
+        $this->grid        = $grid;
+        $this->fireResults = $fireResults;
+        $this->locked      = $locked;
     }
 
     private function lock()
