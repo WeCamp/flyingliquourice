@@ -8,7 +8,7 @@ class NyanListener implements \PHPUnit_Framework_TestListener
 
     public function endTest(\PHPUnit_Framework_Test $test, $time)
     {
-        usleep(rand(20000, 300000));
+        usleep(rand(20000, 100000));
     }
 
     /**
