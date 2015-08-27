@@ -2,8 +2,10 @@
 
 namespace Wecamp\FlyingLiqourice\Domain;
 
+use Assert\Assertion;
 use Wecamp\FlyingLiqourice\Domain\Game\Coords;
 use Wecamp\FlyingLiqourice\Domain\Game\FireResult;
+use Wecamp\FlyingLiqourice\Domain\Game\GameIsLockedException;
 use Wecamp\FlyingLiqourice\Domain\Game\Grid;
 
 final class Game
@@ -19,24 +21,37 @@ final class Game
     private $grid;
 
     /**
+     * @var bool
+     */
+    private $locked;
+
+    /**
      * Creates a new game.
+     *
+     * @param int $width
+     * @param int $height
+     * @param array $shipSizes
      *
      * @return static
      */
-    public static function create()
+    public static function create($width = null, $height = null, array $shipSizes = null)
     {
         return new static(
             GameIdentifier::generate(),
-            Grid::generate()
+            Grid::generate($width, $height, $shipSizes)
         );
     }
 
     /**
      * @param Coords $coords
-     * @return static
+     * @return FireResult
      */
     public function fire(Coords $coords)
     {
+        if ($this->locked()) {
+            throw new GameIsLockedException;
+        }
+
         $this->grid->shoot($coords);
 
         if (!$this->grid->hasShipAt($coords)) {
@@ -44,6 +59,8 @@ final class Game
         }
 
         if ($this->grid->didAllShipsSink()) {
+            $this->lock();
+
             return FireResult::win(
                 $this->grid->startPointOfShipAt($coords),
                 $this->grid->endPointOfShipAt($coords)
@@ -61,6 +78,16 @@ final class Game
     }
 
     /**
+     * @return Game\Ship[]
+     */
+    public function quit()
+    {
+        $this->lock();
+
+        return $this->grid->ships();
+    }
+
+    /**
      * Recreates a game from an array.
      *
      * @param array $data
@@ -70,7 +97,8 @@ final class Game
     {
         return new static(
             GameIdentifier::fromString($data['id']),
-            Grid::fromArray($data['grid'])
+            Grid::fromArray($data['grid']),
+            $data['locked']
         );
     }
 
@@ -93,7 +121,8 @@ final class Game
     {
         return [
             'id' => (string) $this->id,
-            'grid' => $this->grid->toArray()
+            'grid' => $this->grid->toArray(),
+            'locked' => $this->locked
         ];
     }
 
@@ -105,10 +134,27 @@ final class Game
     /**
      * @param Identifier $id
      * @param Grid $grid
+     * @param bool $locked
      */
-    private function __construct(Identifier $id, Grid $grid)
+    private function __construct(Identifier $id, Grid $grid, $locked = false)
     {
+        Assertion::boolean($locked);
+
         $this->id = $id;
         $this->grid = $grid;
+        $this->locked = $locked;
+    }
+
+    private function lock()
+    {
+        $this->locked = true;
+    }
+
+    /**
+     * @return bool
+     */
+    private function locked()
+    {
+        return $this->locked;
     }
 }

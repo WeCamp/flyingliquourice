@@ -33,7 +33,7 @@ class FireResult
      */
     private function __construct($result, Coords $startPoint = null, Coords $endPoint = null)
     {
-        Assertion::choice($result, [static::HIT, static::MISS, static::SANK]);
+        Assertion::choice($result, [static::HIT, static::MISS, static::SANK, static::WIN]);
 
         if ($result == static::SANK) {
             Assertion::notNull($startPoint);
