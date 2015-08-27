@@ -130,9 +130,9 @@ class Fields implements \IteratorAggregate
         return true;
     }
 
+
     /**
      * @param Coords $coords
-     *
      * @return Coords
      */
     public function startPointOfShipAt(Coords $coords)
@@ -142,11 +142,12 @@ class Fields implements \IteratorAggregate
                 return $element->startPointOfShip();
             }
         }
+        throw new NoShipAtTheseCoordsException();
     }
+
 
     /**
      * @param Coords $coords
-     *
      * @return Coords
      */
     public function endPointOfShipAt(Coords $coords)
@@ -156,6 +157,7 @@ class Fields implements \IteratorAggregate
                 return $element->endPointOfShip();
             }
         }
+        throw new NoShipAtTheseCoordsException();
     }
 
     /**
