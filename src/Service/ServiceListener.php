@@ -42,10 +42,7 @@ class ServiceListener
     {
         if (!empty($this->id)) {
             $identifier = GameIdentifier::fromString($this->id());
-            $dbh = new \PDO('sqlite:./data/games');
-            $repository = new SqliteGameRepository($dbh);
-
-            $game = $repository->get($identifier);
+            $game = $this->repository()->get($identifier);
 
             echo 'Re initializing game id: ' . $game->id() . PHP_EOL;
         }

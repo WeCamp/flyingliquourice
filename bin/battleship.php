@@ -1,5 +1,8 @@
 <?php
 
+$port = 4000;
+$ip = '192.168.11.64';
+
 require __DIR__.'/../vendor/autoload.php';
 $loop = React\EventLoop\Factory::create();
 $socket = new React\Socket\Server($loop);
@@ -26,8 +29,6 @@ $socket->on('connection', function ($conn) use ($conns) {
         $conns->detach($conn);
     });
 });
-$port = 4000;
-$ip = '192.168.11.64';
 echo "Socket server listening on port " . $port . ".\n";
 echo "You can connect to it by running: telnet " . $ip . " " . $port . "\n";
 $socket->listen($port, $ip);
