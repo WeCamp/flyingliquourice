@@ -40,37 +40,6 @@ class Fields implements \IteratorAggregate
     }
 
     /**
-     * @param int   $width
-     * @param int   $height
-     * @param array $shipSizes
-     *
-     * @return static
-     */
-    public static function generate($width, $height, array $shipSizes)
-    {
-        Assertion::integer($width);
-        Assertion::integer($height);
-        Assertion::allInteger($shipSizes);
-
-        // @Todo Something spiffy to place ships
-        $elements = [];
-        for ($x = 0; $x < $width; $x++) {
-            for ($y = 0; $y < $height; $y++) {
-                $elements[] = Field::generate(
-                    $x,
-                    $y,
-                    Ship::create(
-                        Coords::create($x, $y),
-                        Coords::create($x, $y)
-                    )
-                );
-            }
-        }
-
-        return new static ($elements);
-    }
-
-    /**
      * @param array $fields
      *
      * @return static
