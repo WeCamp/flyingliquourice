@@ -13,6 +13,7 @@ class Fields implements \IteratorAggregate
 
     /**
      * @param Field[] $fields
+     *
      * @return static
      */
     public static function create(array $fields)
@@ -40,6 +41,7 @@ class Fields implements \IteratorAggregate
 
     /**
      * @param array $fields
+     *
      * @return static
      */
     public static function fromArray(array $fields)
@@ -48,6 +50,7 @@ class Fields implements \IteratorAggregate
         foreach ($fields as $field) {
             $elements[] = Field::fromArray($field);
         }
+
         return new static ($elements);
     }
 
@@ -60,6 +63,7 @@ class Fields implements \IteratorAggregate
         foreach ($this->elements as $element) {
             $fields[] = $element->toArray();
         }
+
         return $fields;
     }
 
@@ -68,9 +72,11 @@ class Fields implements \IteratorAggregate
      */
     public function shoot(Coords $coords)
     {
-        foreach($this->elements as $element) {
+        foreach ($this->elements as $element) {
             if ($element->at($coords)) {
+                $element->hit();
                 $element->shoot();
+
                 return;
             }
         }
@@ -78,20 +84,37 @@ class Fields implements \IteratorAggregate
 
     /**
      * @param Coords $coords
+     *
      * @return bool
      */
     public function didShipSankAt(Coords $coords)
     {
-        foreach($this->elements as $element) {
+        foreach ($this->elements as $element) {
             if ($element->at($coords)) {
                 return $element->hasSunkenShip();
             }
         }
+
         return false;
     }
 
     /**
+     * @return bool
+     */
+    public function didAllShipsSink()
+    {
+        foreach ($this->elements as $element) {
+            if ($element->occupied() && !$element->hasSunkenShip()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @param Coords $coords
+     *
      * @return Coords
      */
     public function startPointOfShipAt(Coords $coords)
@@ -105,6 +128,7 @@ class Fields implements \IteratorAggregate
 
     /**
      * @param Coords $coords
+     *
      * @return Coords
      */
     public function endPointOfShipAt(Coords $coords)
@@ -118,6 +142,7 @@ class Fields implements \IteratorAggregate
 
     /**
      * @param Coords $spot
+     *
      * @return Field
      */
     public function at(Coords $spot)
@@ -131,6 +156,7 @@ class Fields implements \IteratorAggregate
 
     /**
      * @param Coords $spot
+     *
      * @return bool
      */
     public function hasAt(Coords $spot)
@@ -158,7 +184,7 @@ class Fields implements \IteratorAggregate
 
     public function __toString()
     {
-        $result = PHP_EOL . '|';
+        $result     = PHP_EOL . '|';
         $currentRow = 0;
         foreach ($this->elements as $element) {
             if ($element->coords()->y() > $currentRow) {

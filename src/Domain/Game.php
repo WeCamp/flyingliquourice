@@ -43,12 +43,12 @@ final class Game
             return FireResult::miss();
         }
 
-
-        //@todo Check for win
-
-//        if ($this->grid->didAllShipsSank()) {
-//            return FireResult::win();
-//        }
+        if ($this->grid->didAllShipsSink()) {
+            return FireResult::win(
+                $this->grid->startPointOfShipAt($coords),
+                $this->grid->endPointOfShipAt($coords)
+            );
+        }
 
         if ($this->grid->didShipSankAt($coords)) {
             return FireResult::sank(
