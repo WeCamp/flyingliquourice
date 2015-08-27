@@ -95,8 +95,8 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
- * @test
- */
+     * @test
+     */
     public function it_asks_ship_startpoint_on_a_field_without_a_ship()
     {
         $field = Field::generate(1,1);
@@ -117,6 +117,4 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
 
         $field->endPointOfShip();
     }
-
-
 }
