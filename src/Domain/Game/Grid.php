@@ -25,7 +25,7 @@ class Grid
     private $height;
 
     /**
-     * @var Fields|Field[]
+     * @var Fields
      */
     private $fields;
 
@@ -49,17 +49,23 @@ class Grid
     }
 
     /**
+     * @param int $width
+     * @param int $height
+     * @param array $shipSizes
      * @return static
      */
-    public static function generate()
-    {
+    public static function generate(
+        $width = null,
+        $height = null,
+        array $shipSizes = null
+    ) {
         return new static(
-            static::DEFAULT_WIDTH,
-            static::DEFAULT_HEIGHT,
+            ($width === null) ? static::DEFAULT_WIDTH : $width,
+            ($height === null) ? static::DEFAULT_HEIGHT : $height,
             FieldsGenerator::generate(
-                static::DEFAULT_WIDTH,
-                static::DEFAULT_HEIGHT,
-                static::$defaultShipSizes
+                ($width === null) ? static::DEFAULT_WIDTH : $width,
+                ($height === null) ? static::DEFAULT_HEIGHT : $height,
+                ($shipSizes === null) ? static::$defaultShipSizes : $shipSizes
             )
         );
     }
@@ -103,7 +109,8 @@ class Grid
     {
         $this->ensureCoordsInGrid($coords);
 
-        foreach($this->fields as $field) {
+        /** @var Field $field */
+        foreach ($this->fields as $field) {
             if ($field->at($coords) && $field->occupied()) {
                 return true;
             }
@@ -178,5 +185,13 @@ class Grid
     public function didAllShipsSink()
     {
         return $this->fields->didAllShipsSink();
+    }
+
+    /**
+     * @return Ship[]
+     */
+    public function ships()
+    {
+        return $this->fields->ships();
     }
 }

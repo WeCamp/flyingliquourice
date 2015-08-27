@@ -12,6 +12,11 @@ class Fields implements \IteratorAggregate
     private $elements;
 
     /**
+     * @var Ship[]
+     */
+    private $ships;
+
+    /**
      * @param Field[] $fields
      *
      * @return static
@@ -23,12 +28,15 @@ class Fields implements \IteratorAggregate
 
     /**
      * @param Field[] $elements
+     * @param Ship[] $ships
      */
-    private function __construct(array $elements)
+    private function __construct(array $elements, array $ships = [])
     {
         Assertion::allIsInstanceOf($elements, Field::class);
+        Assertion::allIsInstanceOf($ships, Ship::class);
 
         $this->elements = $elements;
+        $this->ships = $ships;
     }
 
     /**
@@ -40,18 +48,23 @@ class Fields implements \IteratorAggregate
     }
 
     /**
-     * @param array $fields
+     * @param array $data
      *
      * @return static
      */
-    public static function fromArray(array $fields)
+    public static function fromArray(array $data)
     {
         $elements = [];
-        foreach ($fields as $field) {
+        foreach ($data['fields'] as $field) {
             $elements[] = Field::fromArray($field);
         }
 
-        return new static ($elements);
+        $ships = [];
+        foreach ($data['ships'] as $ship) {
+            $ships[] = Ship::fromArray($ship);
+        }
+
+        return new static($elements, $ships);
     }
 
     /**
@@ -64,7 +77,12 @@ class Fields implements \IteratorAggregate
             $fields[] = $element->toArray();
         }
 
-        return $fields;
+        $ships = [];
+        foreach ($this->ships as $ship) {
+            $ships[] = $ship->toArray();
+        }
+
+        return ['fields' => $fields, 'ships' => $ships];
     }
 
     /**
@@ -180,6 +198,8 @@ class Fields implements \IteratorAggregate
                 $field->place($ship);
             }
         }
+
+        $this->ships[] = $ship;
     }
 
     public function __toString()
@@ -196,5 +216,13 @@ class Fields implements \IteratorAggregate
         }
 
         return $result . '|' . PHP_EOL;
+    }
+
+    /**
+     * @return Ship[]
+     */
+    public function ships()
+    {
+        return $this->ships;
     }
 }
