@@ -85,7 +85,7 @@ class Ship
     {
         $size = $this->startPoint->distance($this->endPoint) + 1;
 
-        return ($this->hits === $size);
+        return ($this->hits >= $size);
     }
 
     /**
