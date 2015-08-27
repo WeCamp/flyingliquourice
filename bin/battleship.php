@@ -1,12 +1,13 @@
+#!/usr/bin/env php
 <?php
-
-$port = 4000;
-$ip = '192.168.11.64';
 
 require __DIR__.'/../vendor/autoload.php';
 $loop = React\EventLoop\Factory::create();
 $socket = new React\Socket\Server($loop);
 $conns = new \SplObjectStorage();
+
+$ip = array_key_exists(1, $argv) ? $argv[1] : '127.0.0.1';
+$port = array_key_exists(2, $argv) ? $argv[2] : 1337;
 
 $socket->on('connection', function ($conn) use ($conns) {
     $conn->id = '';
