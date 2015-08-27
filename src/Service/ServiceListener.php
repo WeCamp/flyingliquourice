@@ -2,7 +2,10 @@
 
 namespace Wecamp\FlyingLiqourice\Service;
 
+use Wecamp\FlyingLiqourice\Domain\Coords;
 use Wecamp\FlyingLiqourice\Domain\Game;
+use Wecamp\FlyingLiqourice\Domain\GameIdentifier;
+use Wecamp\FlyingLiqourice\Storage\SqliteGameRepository;
 
 class ServiceListener
 {
@@ -16,18 +19,27 @@ class ServiceListener
      */
     private $id;
 
+    private $repository;
+
     public function __construct($token, $id = '')
     {
         $this->token = strtolower($token);
 
         $this->id = $id;
 
+        $dbh = new \PDO('sqlite:./data/games');
+        $this->repository = new SqliteGameRepository($dbh);
     }
 
     public function run()
     {
         if (!empty($this->id)) {
-            $game = Game::fromArray(['id' => $this->id]);
+            $identifier = GameIdentifier::fromString($this->id());
+            $dbh = new \PDO('sqlite:./data/games');
+            $repository = new SqliteGameRepository($dbh);
+
+            $game = $repository->get($identifier);
+
             echo 'Re initializing game id: ' . $game->id() . PHP_EOL;
         }
         $tokenized = explode(' ', $this->token);
@@ -52,10 +64,16 @@ class ServiceListener
         return $this->id;
     }
 
+    private function repository()
+    {
+        return $this->repository;
+    }
+
     protected function start($id = '')
     {
         if (strlen($id) !== 0) {
-            $game = Game::fromArray(['id' => $id]);
+            $identifier = GameIdentifier::fromString($id);
+            $game = $this->repository()->get($identifier);
             echo 'Game restarted: ' . $game->id() . PHP_EOL;
         } else {
             $game = Game::create();
@@ -63,35 +81,42 @@ class ServiceListener
         }
 
         $this->id = $game->id();
-        $result = json_encode($game->toArray());
+        $result = 'STARTED ' . $game->id();
+
+        $this->repository()->save($game);
 
         return $result;
     }
 
     protected function status()
     {
-        $game = Game::fromArray(['id' => $this->id()]);
-        $result = json_encode($game->toArray());
+        $identifier = GameIdentifier::fromString($this->id());
+        $game = $this->repository()->get($identifier);
+
+        $result = 'STATUS ' . json_encode($game->toArray());
         echo 'Get game status: ' . $game->id() . PHP_EOL;
         return $result;
     }
 
-    protected function quit($id = '')
+    protected function quit()
     {
-        $game = Game::fromArray(['id' => $this->id()]);
+        $identifier = GameIdentifier::fromString($this->id());
+        $game = $this->repository()->get($identifier);
 
-        $this->id = $game->id();
-        $result = json_encode('You lost');
-        echo 'Quitting game' . $game->id() . PHP_EOL;
+        $result = 'LOST ' . $game->id();
+        echo 'Quitting game ' . $game->id() . PHP_EOL;
         return $result;
     }
 
     protected function fire($location)
     {
-        $game = Game::fromArray(['id' => $this->id()]);
-        $coords = explode('.', $location);
+        $identifier = GameIdentifier::fromString($this->id());
+        $game = $this->repository()->get($identifier);
+        $coordElements = explode('.', $location);
+        $coords = Coords::fromArray(['x' => (int) $coordElements[0], 'y' => (int) $coordElements[1]]);
+        $result = $game->fire($coords);
+        $this->repository()->save($game);
 
-        $result = json_encode(sprintf('Shot has been fired on %d-%d', $coords[0], $coords[1]));
         echo 'Firing on ' . $location . ' in game: ' . $game->id() . PHP_EOL;
         return $result;
     }

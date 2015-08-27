@@ -17,7 +17,7 @@ $socket->on('connection', function ($conn) use ($conns) {
                     $conn->id = (string) $service->id();
 
                 } catch (\InvalidArgumentException $e) {
-                    $current->write(json_encode('You did something wrong') . PHP_EOL);
+                    $current->write('ERR You did something wrong' . PHP_EOL);
                 }
             }
         }
