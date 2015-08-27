@@ -15,7 +15,7 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
             'hits'          => 3
         ];
         $ship = Ship::fromArray($data);
-        $field = Field::generate(1,1,$ship);
+        $field = Field::generate(1, 1, $ship);
         $this->assertEquals(true, $field->occupied());
         $this->assertEquals(true, $field->hasSunkenShip());
     }
@@ -31,7 +31,7 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
             'hits'          => 1
         ];
         $ship = Ship::fromArray($data);
-        $field = Field::generate(1,1,$ship);
+        $field = Field::generate(1, 1, $ship);
         $this->assertEquals(true, $field->occupied());
         $this->assertEquals(false, $field->hasSunkenShip());
     }
@@ -41,7 +41,7 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
      */
     public function it_creates_a_field_without_a_ship()
     {
-        $field = Field::generate(1,1);
+        $field = Field::generate(1, 1);
         $this->assertEquals(false, $field->occupied());
         $this->assertEquals(false, $field->hasSunkenShip());
     }
@@ -52,7 +52,7 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
      */
     public function it_creates_a_field_with_incorect_data()
     {
-        $field = Field::generate('abc','abc');
+        $field = Field::generate('abc', 'abc');
         $this->assertEquals(false, $field->occupied());
         $this->assertEquals(false, $field->hasSunkenShip());
     }
@@ -68,7 +68,7 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
             'hits'          => 2
         ];
         $ship = Ship::fromArray($data);
-        $field = Field::generate(1,1,$ship);
+        $field = Field::generate(1, 1, $ship);
         $this->assertEquals(true, $field->occupied());
         $this->assertEquals(false, $field->hasSunkenShip());
 
@@ -88,7 +88,7 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
             'hits'          => 2
         ];
         $ship = Ship::fromArray($data);
-        $field = Field::generate(1,1,$ship, true);
+        $field = Field::generate(1, 1, $ship, true);
         $this->setExpectedException(FieldAlreadyBeenShotException::class);
 
         $field->shoot();
@@ -99,7 +99,7 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
      */
     public function it_asks_ship_startpoint_on_a_field_without_a_ship()
     {
-        $field = Field::generate(1,1);
+        $field = Field::generate(1, 1);
 
         $this->setExpectedException(NoShipAtThisFieldException::class);
 
@@ -111,7 +111,7 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
      */
     public function it_asks_ship_endpoint_on_a_field_without_a_ship()
     {
-        $field = Field::generate(1,1);
+        $field = Field::generate(1, 1);
 
         $this->setExpectedException(NoShipAtThisFieldException::class);
 
