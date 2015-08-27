@@ -19,6 +19,9 @@ class ServiceListener
      */
     private $id;
 
+    /**
+     * @var SqliteGameRepository
+     */
     private $repository;
 
     public function __construct($token, $id = '')
@@ -31,6 +34,10 @@ class ServiceListener
         $this->repository = new SqliteGameRepository($dbh);
     }
 
+    /**
+     * Run the command in the token
+     * @return string
+     */
     public function run()
     {
         if (!empty($this->id)) {
@@ -59,16 +66,26 @@ class ServiceListener
         throw new \InvalidArgumentException('Wrong command given');
     }
 
+    /**
+     * @return string
+     */
     public function id()
     {
         return $this->id;
     }
 
+    /**
+     * @return SqliteGameRepository
+     */
     private function repository()
     {
         return $this->repository;
     }
 
+    /**
+     * @param string $id
+     * @return string
+     */
     protected function start($id = '')
     {
         if (strlen($id) !== 0) {
@@ -88,6 +105,10 @@ class ServiceListener
         return $result;
     }
 
+    /**
+     * Get the status of the current game
+     * @return string
+     */
     protected function status()
     {
         $identifier = GameIdentifier::fromString($this->id());
@@ -98,6 +119,10 @@ class ServiceListener
         return $result;
     }
 
+    /**
+     * Quit the game
+     * @return string
+     */
     protected function quit()
     {
         $identifier = GameIdentifier::fromString($this->id());
@@ -108,6 +133,11 @@ class ServiceListener
         return $result;
     }
 
+    /**
+     * fire on $location
+     * @param string $location
+     * @return string
+     */
     protected function fire($location)
     {
         $identifier = GameIdentifier::fromString($this->id());
