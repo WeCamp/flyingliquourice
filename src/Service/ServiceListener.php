@@ -53,13 +53,12 @@ class ServiceListener
         if (count($tokenized) == 2) {
             $argument = trim($tokenized[1]);
         }
-        if (method_exists($this, $command)
-            && $command !== 'run'
-        ) {
-            return $this->$command($argument);
+
+        if (!in_array($command, ['start', 'f', 'fire', 'status', 'surrender', 'field'])) {
+            throw new \InvalidArgumentException('Wrong command given');
         }
 
-        throw new \InvalidArgumentException('Wrong command given');
+        return $this->$command($argument);
     }
 
     /**
@@ -135,7 +134,12 @@ class ServiceListener
 
         echo 'Surrendering game ' . $game->id() . PHP_EOL;
         echo (string) $game;
-        return 'LOST ' . $game->id();
+
+        $result = 'SURRENDERED';
+        foreach ($game->ships() as $ship) {
+            $result .= '- SHIP ' . $ship->startPoint() . ' ' . $ship->endPoint() . PHP_EOL;
+        }
+        return $result;
     }
 
     /**

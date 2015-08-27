@@ -169,6 +169,14 @@ final class Game
         ];
     }
 
+    /**
+     * @return Game\Ship[]
+     */
+    public function ships()
+    {
+        return $this->grid->ships();
+    }
+
     public function __toString()
     {
         return (string) $this->id() . PHP_EOL . ((string) $this->grid) . PHP_EOL;
