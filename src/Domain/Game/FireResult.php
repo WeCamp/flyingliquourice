@@ -105,7 +105,7 @@ class FireResult
             return $this->result . ' ' . (string) $this->target . ' ' . ((string) $this->startPoint) . ' ' . ((string) $this->endPoint);
         }
 
-        return $this->result;
+        return $this->result . ' ' . (string) $this->target;
     }
 
     /**
