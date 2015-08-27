@@ -41,13 +41,13 @@ class ServiceListener
     {
         if (!empty($this->id)) {
             $identifier = GameIdentifier::fromString($this->id());
-            $game = $this->repository()->get($identifier);
+            $game       = $this->repository()->get($identifier);
 
             echo 'Re initializing game id: ' . $game->id() . PHP_EOL;
         }
         $tokenized = explode(' ', $this->token);
 
-        $command = trim($tokenized[0]);
+        $command  = trim($tokenized[0]);
         $argument = '';
         if (count($tokenized) == 2) {
             $argument = trim($tokenized[1]);
@@ -84,7 +84,7 @@ class ServiceListener
     {
         if (strlen($id) !== 0) {
             $identifier = GameIdentifier::fromString($id);
-            $game = $this->repository()->get($identifier);
+            $game       = $this->repository()->get($identifier);
             echo 'Game restarted: ' . $game->id() . PHP_EOL;
         } else {
             $game = Game::create();
@@ -105,7 +105,7 @@ class ServiceListener
     private function status()
     {
         $identifier = GameIdentifier::fromString($this->id());
-        $game = $this->repository()->get($identifier);
+        $game       = $this->repository()->get($identifier);
 
         echo 'Get game status: ' . $game->id() . PHP_EOL;
         echo (string) $game;
@@ -126,7 +126,7 @@ class ServiceListener
     private function surrender()
     {
         $identifier = GameIdentifier::fromString($this->id());
-        $game = $this->repository()->get($identifier);
+        $game       = $this->repository()->get($identifier);
 
         $game->surrender();
         $this->repository()->save($game);
@@ -159,11 +159,11 @@ class ServiceListener
     private function fire($location)
     {
         $identifier = GameIdentifier::fromString($this->id());
-        $game = $this->repository()->get($identifier);
+        $game       = $this->repository()->get($identifier);
 
         $coordElements = explode('.', $location);
-        $coords = Coords::create((int) $coordElements[0], (int) $coordElements[1]);
-        $result = $game->fire($coords);
+        $coords        = Coords::create((int) $coordElements[0], (int) $coordElements[1]);
+        $result        = $game->fire($coords);
 
         $this->repository()->save($game);
 
@@ -175,7 +175,7 @@ class ServiceListener
     private function field()
     {
         $identifier = GameIdentifier::fromString($this->id());
-        $game = $this->repository()->get($identifier);
+        $game       = $this->repository()->get($identifier);
 
         $this->repository()->save($game);
         return 'FIELD ' . PHP_EOL . $game;

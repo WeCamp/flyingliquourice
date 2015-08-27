@@ -131,7 +131,7 @@ class FireResult
         return new static(
             $fireResult['result'],
             Coords::fromArray($fireResult['target']),
-            (array_key_exists('x',$fireResult['startPoint']) ? Coords::fromArray($fireResult['startPoint']) : null),
+            (array_key_exists('x', $fireResult['startPoint']) ? Coords::fromArray($fireResult['startPoint']) : null),
             (array_key_exists('y', $fireResult['endPoint']) ? Coords::fromArray($fireResult['endPoint']) : null)
         );
     }

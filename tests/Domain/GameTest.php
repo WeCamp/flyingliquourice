@@ -70,8 +70,8 @@ final class GameTest extends \PHPUnit_Framework_TestCase
         ];
 
         $gameData = ['id' => Uuid::uuid4()->toString(), 'locked' => false, 'grid' => $data, 'fireResults' => []];
-        $game = Game::fromArray($gameData);
-        $result = $game->fire(Coords::create(0, 0));
+        $game     = Game::fromArray($gameData);
+        $result   = $game->fire(Coords::create(0, 0));
 
         $this->assertEquals('HIT 0.0', (string)$result);
 
@@ -149,8 +149,8 @@ final class GameTest extends \PHPUnit_Framework_TestCase
         ];
 
         $gameData = ['id' => Uuid::uuid4()->toString(), 'locked' => false, 'grid' => $data, 'fireResults' => []];
-        $game = Game::fromArray($gameData);
-        $result = $game->fire(Coords::create(0, 0));
+        $game     = Game::fromArray($gameData);
+        $result   = $game->fire(Coords::create(0, 0));
 
         $this->assertEquals('HIT 0.0', (string)$result);
 
