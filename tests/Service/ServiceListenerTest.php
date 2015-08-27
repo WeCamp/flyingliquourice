@@ -78,7 +78,7 @@ class ServiceListenerTest extends \PHPUnit_Framework_TestCase
 
         $token = 'surrender';
         $service = new ServiceListener($token, $game->id(), $repository);
-        $this->assertEquals('LOST ' . $game->id(), $service->run());
+        $this->assertStringStartsWith('SURRENDERED', $service->run());
     }
 
     /**
