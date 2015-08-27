@@ -6,7 +6,7 @@ use Assert\Assertion;
 
 class Grid
 {
-    const DEFAULT_WIDTH = 10;
+    const DEFAULT_WIDTH  = 10;
     const DEFAULT_HEIGHT = 10;
 
     /**
@@ -34,7 +34,7 @@ class Grid
         Assertion::integer($width);
         Assertion::integer($height);
 
-        $this->width = $width;
+        $this->width  = $width;
         $this->height = $height;
         $this->fields = $fields;
     }

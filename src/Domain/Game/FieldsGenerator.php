@@ -36,7 +36,7 @@ final class FieldsGenerator
                 }
 
                 $direction = (mt_rand(0, 1) == 0) ? 'right' : 'below';
-                $spot = Coords::create(
+                $spot      = Coords::create(
                     mt_rand(0, $width - 1),
                     mt_rand(0, $height - 1)
                 );

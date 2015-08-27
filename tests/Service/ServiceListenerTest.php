@@ -22,8 +22,8 @@ class ServiceListenerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['get', 'save'])
             ->getMock();
 
-        $token = 'START';
-        $id = Uuid::uuid4()->toString();
+        $token   = 'START';
+        $id      = Uuid::uuid4()->toString();
         $service = new ServiceListener($token, $id, $repository);
         $this->assertEquals($id, $service->id());
     }
@@ -33,10 +33,10 @@ class ServiceListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function it_creates_a_new_game()
     {
-        $game = Game::create();
+        $game       = Game::create();
         $repository = $this->repository($game);
 
-        $token = 'START';
+        $token   = 'START';
         $service = new ServiceListener($token, '', $repository);
 
         $this->assertStringStartsWith('STARTED ', $service->run());
@@ -47,10 +47,10 @@ class ServiceListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function it_restarts_a_game()
     {
-        $game = Game::create();
+        $game       = Game::create();
         $repository = $this->repository($game);
 
-        $token = 'START ' . $game->id();
+        $token   = 'START ' . $game->id();
         $service = new ServiceListener($token, $game->id(), $repository);
         $this->assertEquals('STARTED ' . $game->id(), $service->run());
     }
@@ -60,10 +60,10 @@ class ServiceListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function it_shows_status_of_a_game()
     {
-        $game = Game::create();
+        $game       = Game::create();
         $repository = $this->repository($game);
 
-        $token = 'STATUS ' . $game->id();
+        $token   = 'STATUS ' . $game->id();
         $service = new ServiceListener($token, $game->id(), $repository);
         $this->assertStringStartsWith('STATUS', $service->run());
     }
@@ -73,10 +73,10 @@ class ServiceListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function it_ends_a_game()
     {
-        $game = Game::create();
+        $game       = Game::create();
         $repository = $this->repository($game);
 
-        $token = 'surrender';
+        $token   = 'surrender';
         $service = new ServiceListener($token, $game->id(), $repository);
         $this->assertStringStartsWith('SURRENDERED', $service->run());
     }
@@ -87,10 +87,10 @@ class ServiceListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function it_fires_on_a3()
     {
-        $game = Game::create();
+        $game       = Game::create();
         $repository = $this->repository($game);
         //$id = Uuid::uuid4()->toString();
-        $token = 'fire 12.34';
+        $token   = 'fire 12.34';
         $service = new ServiceListener($token, $game->id(), $repository);
         $this->assertEquals('"Shot has been fired on 12-34"', $service->run());
     }
@@ -101,10 +101,10 @@ class ServiceListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function it_runs_a_non_existing_command()
     {
-        $game = Game::create();
+        $game       = Game::create();
         $repository = $this->repository($game);
 
-        $token = 'unknown command';
+        $token   = 'unknown command';
         $service = new ServiceListener($token, $game->id(), $repository);
         $service->run();
     }
@@ -115,10 +115,10 @@ class ServiceListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function it_runs_non_existing_command_run()
     {
-        $game = Game::create();
+        $game       = Game::create();
         $repository = $this->repository($game);
 
-        $token = 'run';
+        $token   = 'run';
         $service = new ServiceListener($token, $game->id(), $repository);
         $service->run();
     }

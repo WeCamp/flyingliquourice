@@ -34,8 +34,8 @@ class Ship
         Assertion::lessOrEqualThan($hits, $size);
 
         $this->startPoint = $startPoint;
-        $this->endPoint = $endPoint;
-        $this->hits = $hits;
+        $this->endPoint   = $endPoint;
+        $this->hits       = $hits;
     }
 
     /**

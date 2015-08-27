@@ -80,7 +80,6 @@ final class Game
         }
 
         if ($this->grid->didShipSankAt($coords)) {
-
             $sank = FireResult::sank(
                 $coords,
                 $this->grid->startPointOfShipAt($coords),

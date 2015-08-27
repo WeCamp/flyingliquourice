@@ -36,7 +36,7 @@ class Fields implements \IteratorAggregate
         Assertion::allIsInstanceOf($ships, Ship::class);
 
         $this->elements = $elements;
-        $this->ships = $ships;
+        $this->ships    = $ships;
     }
 
     /**

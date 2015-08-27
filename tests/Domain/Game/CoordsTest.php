@@ -47,5 +47,4 @@ final class CoordsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(Coords::create(3, 3), $coords->right(2));
     }
-
 }

@@ -4,13 +4,12 @@ namespace Wecamp\FlyingLiqourice\Domain\Game;
 
 final class FieldsTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @test
      */
     public function it_creates_fields_without_ships()
     {
-        $fields = [];
+        $fields   = [];
         $fields[] = Field::generate(1, 1);
         $fields[] = Field::generate(1, 2);
 
@@ -28,7 +27,7 @@ final class FieldsTest extends \PHPUnit_Framework_TestCase
      */
     public function it_shoots_outside_fields_without_ships()
     {
-        $fields = [];
+        $fields   = [];
         $fields[] = Field::generate(1, 1);
         $fields[] = Field::generate(1, 2);
 

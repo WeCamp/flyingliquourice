@@ -20,7 +20,7 @@ final class SqliteGameRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->pdo = $this->getMock(MockPDO::class, ['prepare']);
+        $this->pdo        = $this->getMock(MockPDO::class, ['prepare']);
         $this->repository = new SqliteGameRepository($this->pdo);
     }
 
@@ -64,7 +64,7 @@ final class SqliteGameRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function it_should_get_a_game()
     {
-        $game = Game::create();
+        $game       = Game::create();
         $identifier = $game->id();
 
         $stmt = $this->getMockBuilder('stdClass')
@@ -105,5 +105,6 @@ final class SqliteGameRepositoryTest extends \PHPUnit_Framework_TestCase
 class MockPDO extends \PDO
 {
     public function __construct()
-    {}
+    {
+    }
 }

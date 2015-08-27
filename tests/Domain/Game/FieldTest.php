@@ -33,7 +33,7 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
             'endPoint'      => ['x'=>2,'y'=>4],
             'hits'          => 1
         ];
-        $ship = Ship::fromArray($data);
+        $ship  = Ship::fromArray($data);
         $field = Field::generate(1, 1);
         $field->place($ship);
         $this->assertEquals(true, $field->occupied());
@@ -71,7 +71,7 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
             'endPoint'      => ['x'=>2,'y'=>4],
             'hits'          => 2
         ];
-        $ship = Ship::fromArray($data);
+        $ship  = Ship::fromArray($data);
         $field = Field::generate(1, 1);
         $field->place($ship);
         $this->assertEquals(true, $field->occupied());
@@ -92,7 +92,7 @@ final class FieldTest extends \PHPUnit_Framework_TestCase
             'endPoint'      => ['x'=>2,'y'=>4],
             'hits'          => 2
         ];
-        $ship = Ship::fromArray($data);
+        $ship  = Ship::fromArray($data);
         $field = Field::generate(1, 1);
         $field->shoot();
         $field->place($ship);

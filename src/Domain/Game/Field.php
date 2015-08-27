@@ -26,7 +26,7 @@ class Field
         Assertion::boolean($shot);
 
         $this->coords = $coords;
-        $this->shot = $shot;
+        $this->shot   = $shot;
     }
 
     /**
