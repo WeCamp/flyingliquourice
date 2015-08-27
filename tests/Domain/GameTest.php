@@ -49,9 +49,10 @@ final class GameTest extends \PHPUnit_Framework_TestCase
      */
     public function it_should_return_the_grid_as_a_string()
     {
-        $game = Game::create(10, 10);
+        $game = Game::create();
 
-        $this->assertSame(269, mb_strlen((string) $game));
+        $this->assertInternalType('string', (string) $game);
+        $this->assertNotEmpty((string) $game);
     }
 
     /**
