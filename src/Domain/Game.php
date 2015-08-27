@@ -11,6 +11,11 @@ use Wecamp\FlyingLiqourice\Domain\Game\Grid;
 final class Game
 {
     /**
+     * @var FireResult[]
+     */
+    private $fireResults = [];
+
+    /**
      * @var Identifier
      */
     private $id;
@@ -53,28 +58,52 @@ final class Game
         }
 
         $this->grid->shoot($coords);
-
         if (!$this->grid->hasShipAt($coords)) {
-            return FireResult::miss();
+            $miss = FireResult::miss($coords);
+            $this->fireResults[] = $miss;
+
+            return $miss;
         }
 
         if ($this->grid->didAllShipsSink()) {
             $this->lock();
-
-            return FireResult::win(
+            $win = FireResult::win(
+                $coords,
                 $this->grid->startPointOfShipAt($coords),
                 $this->grid->endPointOfShipAt($coords)
             );
+
+            $this->fireResults[] = $win;
+
+            return $win;
         }
 
         if ($this->grid->didShipSankAt($coords)) {
-            return FireResult::sank(
+
+            $sank = FireResult::sank(
+                $coords,
                 $this->grid->startPointOfShipAt($coords),
                 $this->grid->endPointOfShipAt($coords)
             );
+
+            $this->fireResults[] = $sank;
+
+            return $sank;
         }
 
-        return FireResult::hit();
+        $hit = FireResult::hit($coords);
+
+        $this->fireResults[] = $hit;
+
+        return $hit;
+    }
+
+    /**
+     * @return FireResult[]
+     */
+    public function status()
+    {
+        return $this->fireResults;
     }
 
     /**
@@ -91,6 +120,7 @@ final class Game
      * Recreates a game from an array.
      *
      * @param array $data
+     *
      * @return static
      */
     public static function fromArray(array $data)
