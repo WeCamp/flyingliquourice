@@ -40,7 +40,9 @@ final class FieldsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(false, $fieldsClass->didShipSankAt(Coords::create(5,5)));
 
-        $this->assertEquals(false, $fieldsClass->startPointOfShipAt(Coords::create(5,5)));
+        $this->setExpectedException(NoShipAtTheseCoordsException::class);
+
+        $fieldsClass->startPointOfShipAt(Coords::create(5,5));
     }
 
     /**
