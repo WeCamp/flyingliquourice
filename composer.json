@@ -15,7 +15,7 @@
         "php": ">=5.5",
         "ramsey/uuid": "^2.8",
         "beberlei/assert": "^2.4",
-        "react/http" : "0.3.*",
+        "react/socket" : "0.4.2",
         "cboden/ratchet": "0.3.*"
     },
     "require-dev": {
@@ -26,3 +26,4 @@
         "humbug/humbug": "~1.0@dev"
     }
 }
+
