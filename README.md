@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/WeCamp/flyingliquourice.png?label=ready&title=Ready)](https://waffle.io/WeCamp/flyingliquourice)
 [![Build Status](https://travis-ci.org/WeCamp/flyingliquourice.svg?branch=travis)](https://travis-ci.org/WeCamp/flyingliquourice)
 [![StyleCI](https://styleci.io/repos/41369464/shield)](https://styleci.io/repos/41369464)
 
