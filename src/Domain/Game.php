@@ -7,6 +7,7 @@ use Wecamp\FlyingLiqourice\Domain\Game\Coords;
 use Wecamp\FlyingLiqourice\Domain\Game\FireResult;
 use Wecamp\FlyingLiqourice\Domain\Game\GameIsLockedException;
 use Wecamp\FlyingLiqourice\Domain\Game\Grid;
+use Wecamp\FlyingLiqourice\Domain\Game\Score;
 
 final class Game
 {
@@ -31,6 +32,11 @@ final class Game
     private $locked;
 
     /**
+     * @var Score
+     */
+    private $score;
+
+    /**
      * Creates a new game.
      *
      * @param int   $width
@@ -43,7 +49,8 @@ final class Game
     {
         return new static(
             GameIdentifier::generate(),
-            Grid::generate($width, $height, $shipSizes)
+            Grid::generate($width, $height, $shipSizes),
+            Score::create()
         );
     }
 
@@ -133,6 +140,7 @@ final class Game
         return new static(
             GameIdentifier::fromString($data['id']),
             Grid::fromArray($data['grid']),
+            Score::create($fireResults),
             $fireResults,
             $data['locked']
         );
@@ -176,24 +184,32 @@ final class Game
         return $this->grid->ships();
     }
 
+    public function score()
+    {
+        return $this->score;
+    }
+
     public function __toString()
     {
-        return (string) $this->id() . PHP_EOL . ((string) $this->grid) . PHP_EOL;
+        return (string) $this->id() . PHP_EOL
+            . ((string) $this->grid) . PHP_EOL;
     }
 
     /**
      * @param Identifier   $id
      * @param Grid         $grid
+     * @param Score        $score
      * @param FireResult[] $fireResults
      * @param bool         $locked
      */
-    private function __construct(Identifier $id, Grid $grid, array $fireResults = [], $locked = false)
+    private function __construct(Identifier $id, Grid $grid, Score $score, array $fireResults = [], $locked = false)
     {
         Assertion::boolean($locked);
         Assertion::allIsInstanceOf($fireResults, FireResult::class);
 
         $this->id          = $id;
         $this->grid        = $grid;
+        $this->score       = $score;
         $this->fireResults = $fireResults;
         $this->locked      = $locked;
     }

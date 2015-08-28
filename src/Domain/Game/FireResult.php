@@ -140,4 +140,19 @@ class FireResult
     {
         return $this->result === static::WIN;
     }
+
+    public function isHit()
+    {
+        return $this->result === static::HIT;
+    }
+
+    public function isSank()
+    {
+        return $this->result === static::SANK;
+    }
+
+    public function isMiss()
+    {
+        return $this->result === static::MISS;
+    }
 }
