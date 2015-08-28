@@ -43,4 +43,3 @@ echo 'Socket server listening on port ' . $port . ".\n";
 echo 'You can connect to it by running: telnet ' . $ip . ' ' . $port . "\n";
 $socket->listen($port, $ip);
 $loop->run();
-
