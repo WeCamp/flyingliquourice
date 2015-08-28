@@ -217,8 +217,8 @@ class Fields implements \IteratorAggregate
     {
         $result     = PHP_EOL;
         $currentRow = 0;
-        $rows = 0;
-        $columns = [];
+        $rows       = 0;
+        $columns    = [];
         $columnSize = 0;
 
         foreach ($this->elements as $element) {
