@@ -50,9 +50,9 @@ class ServiceListenerTest extends \PHPUnit_Framework_TestCase
         $game       = Game::create();
         $repository = $this->repository($game);
 
-        $token   = 'START ' . $game->id();
+        $token   = 'RESTART ' . $game->id();
         $service = new ServiceListener($token, $game->id(), $repository);
-        $this->assertEquals('STARTED ' . $game->id(), $service->run());
+        $this->assertEquals('RESTARTED ' . $game->id(), $service->run());
     }
 
     /**
