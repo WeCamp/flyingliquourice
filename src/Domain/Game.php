@@ -191,8 +191,7 @@ final class Game
 
     public function __toString()
     {
-        return (string) $this->id() . PHP_EOL
-            . ((string) $this->grid) . PHP_EOL;
+        return ((string) $this->grid) . PHP_EOL;
     }
 
     /**
