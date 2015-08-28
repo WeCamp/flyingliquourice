@@ -195,7 +195,7 @@ class ServiceListener
 
         $this->repository()->save($game);
         $gameString = (string) $game;
-        $gameString = str_replace(['=', 'v', '^', '<', '>', '«?'], ' ', $gameString);
+        $gameString = str_replace(['=', 'v', '^', '<', '>', '«Å'], ' ', $gameString);
         return 'FIELD ' . PHP_EOL . $gameString . PHP_EOL; // . PHP_EOL . $game;
     }
 
