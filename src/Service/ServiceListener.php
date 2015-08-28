@@ -195,7 +195,7 @@ class ServiceListener
 
         $this->repository()->save($game);
         $gameString = (string) $game;
-        $gameString = str_replace(['=', 'v', '^', '<', '>', '«Å'], ' ', $gameString);
+        $gameString = str_replace(['=', 'v', '^', '<', '>', '«?'], ' ', $gameString);
         return 'FIELD ' . PHP_EOL . $gameString . PHP_EOL; // . PHP_EOL . $game;
     }
 
@@ -204,7 +204,7 @@ class ServiceListener
         $help = 'Battleship commands:' . PHP_EOL;
         $help .= '' . PHP_EOL;
         $help .= 'START [X:Y]   | ' . 'Start a game, optional give the X and Y size, defaults to 10x10' . PHP_EOL;
-        $help .= 'RESUME <ID>   | ' . 'Restart a game with the given ID' .PHP_EOL;
+        $help .= 'RESUME <ID>   | ' . 'Restart a game with the given ID' . PHP_EOL;
         $help .= 'STATUS        | ' . 'Show the status of the game' . PHP_EOL;
         $help .= 'FIRE <X.Y>    | ' . 'Fire on the given coords' . PHP_EOL;
         $help .= 'FIELD         | ' . 'Show the current field with all shots on it' . PHP_EOL;
