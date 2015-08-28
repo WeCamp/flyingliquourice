@@ -7,6 +7,7 @@ use Wecamp\FlyingLiqourice\Domain\Game\Coords;
 use Wecamp\FlyingLiqourice\Domain\Game\FireResult;
 use Wecamp\FlyingLiqourice\Domain\Game\GameIsLockedException;
 use Wecamp\FlyingLiqourice\Domain\Game\Grid;
+use Wecamp\FlyingLiqourice\Domain\Game\Score;
 
 final class Game
 {
@@ -31,6 +32,11 @@ final class Game
     private $locked;
 
     /**
+     * @var Score
+     */
+    private $score;
+
+    /**
      * Creates a new game.
      *
      * @param int   $width
@@ -43,7 +49,8 @@ final class Game
     {
         return new static(
             GameIdentifier::generate(),
-            Grid::generate($width, $height, $shipSizes)
+            Grid::generate($width, $height, $shipSizes),
+            Score::create()
         );
     }
 
@@ -60,8 +67,8 @@ final class Game
 
         $this->grid->shoot($coords);
         if (!$this->grid->hasShipAt($coords)) {
-            $miss                = FireResult::miss($coords);
-            $this->fireResults[] = $miss;
+            $miss = FireResult::miss($coords);
+            $this->trackFireResult($miss);
 
             return $miss;
         }
@@ -74,7 +81,7 @@ final class Game
                 $this->grid->endPointOfShipAt($coords)
             );
 
-            $this->fireResults[] = $win;
+            $this->trackFireResult($win);
 
             return $win;
         }
@@ -86,14 +93,14 @@ final class Game
                 $this->grid->endPointOfShipAt($coords)
             );
 
-            $this->fireResults[] = $sank;
+            $this->trackFireResult($sank);
 
             return $sank;
         }
 
         $hit = FireResult::hit($coords);
 
-        $this->fireResults[] = $hit;
+        $this->trackFireResult($hit);
 
         return $hit;
     }
@@ -133,6 +140,7 @@ final class Game
         return new static(
             GameIdentifier::fromString($data['id']),
             Grid::fromArray($data['grid']),
+            Score::create($fireResults),
             $fireResults,
             $data['locked']
         );
@@ -176,6 +184,11 @@ final class Game
         return $this->grid->ships();
     }
 
+    public function score()
+    {
+        return $this->score;
+    }
+
     public function __toString()
     {
         return ((string) $this->grid) . PHP_EOL;
@@ -184,16 +197,18 @@ final class Game
     /**
      * @param Identifier   $id
      * @param Grid         $grid
+     * @param Score        $score
      * @param FireResult[] $fireResults
      * @param bool         $locked
      */
-    private function __construct(Identifier $id, Grid $grid, array $fireResults = [], $locked = false)
+    private function __construct(Identifier $id, Grid $grid, Score $score, array $fireResults = [], $locked = false)
     {
         Assertion::boolean($locked);
         Assertion::allIsInstanceOf($fireResults, FireResult::class);
 
         $this->id          = $id;
         $this->grid        = $grid;
+        $this->score       = $score;
         $this->fireResults = $fireResults;
         $this->locked      = $locked;
     }
@@ -209,5 +224,14 @@ final class Game
     private function locked()
     {
         return $this->locked;
+    }
+
+    /**
+     * @param FireResult $fireResult
+     */
+    private function trackFireResult(FireResult $fireResult)
+    {
+        $this->fireResults[] = $fireResult;
+        $this->score->track($fireResult);
     }
 }

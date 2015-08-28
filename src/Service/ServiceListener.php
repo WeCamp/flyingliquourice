@@ -118,7 +118,9 @@ class ServiceListener
             $result .= '- ' . $fireResult . PHP_EOL;
         }
 
-        return 'STATUS' . PHP_EOL . $result;
+        return 'STATUS' . PHP_EOL
+            . '- SCORE ' . $game->score() . PHP_EOL
+            . $result;
     }
 
     /**
