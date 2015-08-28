@@ -67,8 +67,8 @@ final class Game
 
         $this->grid->shoot($coords);
         if (!$this->grid->hasShipAt($coords)) {
-            $miss                = FireResult::miss($coords);
-            $this->fireResults[] = $miss;
+            $miss = FireResult::miss($coords);
+            $this->trackFireResult($miss);
 
             return $miss;
         }
@@ -81,7 +81,7 @@ final class Game
                 $this->grid->endPointOfShipAt($coords)
             );
 
-            $this->fireResults[] = $win;
+            $this->trackFireResult($win);
 
             return $win;
         }
@@ -93,14 +93,14 @@ final class Game
                 $this->grid->endPointOfShipAt($coords)
             );
 
-            $this->fireResults[] = $sank;
+            $this->trackFireResult($sank);
 
             return $sank;
         }
 
         $hit = FireResult::hit($coords);
 
-        $this->fireResults[] = $hit;
+        $this->trackFireResult($hit);
 
         return $hit;
     }
@@ -224,5 +224,14 @@ final class Game
     private function locked()
     {
         return $this->locked;
+    }
+
+    /**
+     * @param FireResult $fireResult
+     */
+    private function trackFireResult(FireResult $fireResult)
+    {
+        $this->fireResults[] = $fireResult;
+        $this->score->track($fireResult);
     }
 }
