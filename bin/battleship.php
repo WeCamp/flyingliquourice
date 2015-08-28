@@ -15,6 +15,12 @@ $repository = new \Wecamp\FlyingLiqourice\Storage\SqliteGameRepository($dbh);
 $socket->on('connection', function ($conn) use ($conns, $repository) {
     $conn->id = '';
     $conns->attach($conn);
+    $conn->write(PHP_EOL . PHP_EOL);
+    $conn->write(showShip() . PHP_EOL);
+    $conn->write('WELCOME TO BATTLESHIP' . PHP_EOL);
+    $conn->write(PHP_EOL . PHP_EOL);
+    $conn->write('Use `help` to see all available commands' . PHP_EOL);
+
     $conn->on('data', function ($data) use ($conns, $conn, $repository) {
         foreach ($conns as $current) {
             if ($conn === $current) {
@@ -36,3 +42,24 @@ echo 'Socket server listening on port ' . $port . ".\n";
 echo 'You can connect to it by running: telnet ' . $ip . ' ' . $port . "\n";
 $socket->listen($port, $ip);
 $loop->run();
+
+function showShip() {
+    return '
+
+                                     |__
+                                     |\/
+                                     ---
+                                     / | [
+                              !      | |||
+                            _/|     _/|-++\'
+                        +  +--|    |--|--|_ |-
+                     { /|__|  |/\__|  |--- |||__/
+                    +---------------___[}-_===_.\'____                 /\
+                ____`-\' ||___-{]_| _[}-  |     |_[___\==--            \/   _
+ __..._____--==/___]_|__|_____________________________[___\==--____,------\' .7
+|                                                                     BB-61/
+ \_________________________________________________________________________|
+    Matthew Bace
+ ';
+
+}
