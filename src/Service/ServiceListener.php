@@ -53,7 +53,7 @@ class ServiceListener
             $argument = trim($tokenized[1]);
         }
 
-        if (!in_array($command, ['start', 'restart', 'f', 'fire', 'status', 'surrender', 'field', 'help'])) {
+        if (!in_array($command, ['start', 'resume', 'f', 'fire', 'status', 'surrender', 'field', 'help'])) {
             throw new \InvalidArgumentException('Wrong command given');
         }
 
@@ -101,17 +101,17 @@ class ServiceListener
      * @param string $id
      * @return string
      */
-    private function restart($id = '')
+    private function resume($id = '')
     {
         $identifier = GameIdentifier::fromString($id);
         $game       = $this->repository()->get($identifier);
-        echo 'Game restarted: ' . $game->id() . PHP_EOL;
+        echo 'Game resumed: ' . $game->id() . PHP_EOL;
 
         $this->id = $game->id();
         $this->repository()->save($game);
 
         echo (string) $game;
-        return 'RESTARTED ' . $game->id();
+        return 'RESUMED ' . $game->id();
     }
 
     /**
@@ -204,7 +204,7 @@ class ServiceListener
         $help = 'Battleship commands:' . PHP_EOL;
         $help .= '' . PHP_EOL;
         $help .= 'START [X:Y]   | ' . 'Start a game, optional give the X and Y size, defaults to 10x10' . PHP_EOL;
-        $help .= 'RESTART <ID>  | ' . 'Restart a game with the given ID' .PHP_EOL;
+        $help .= 'RESUME <ID>   | ' . 'Restart a game with the given ID' .PHP_EOL;
         $help .= 'STATUS        | ' . 'Show the status of the game' . PHP_EOL;
         $help .= 'FIRE <X.Y>    | ' . 'Fire on the given coords' . PHP_EOL;
         $help .= 'FIELD         | ' . 'Show the current field with all shots on it' . PHP_EOL;
