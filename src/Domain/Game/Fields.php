@@ -243,9 +243,9 @@ class Fields implements \IteratorAggregate
         $result .= '|' . PHP_EOL;
 
         for ($i = 0; $i < strlen($columnSize); $i++) {
-            $result .= str_pad(' ', strlen($rows) + 1, ' ', STR_PAD_LEFT);
+            $result .= str_pad(' ', strlen($rows) + 1, ' ', STR_PAD_RIGHT);
             foreach ($columns as $column) {
-                $result .= ' ' .substr($column, $i, 1);
+                $result .= substr($column, $i, 1) . ' ';
             }
             $result .= PHP_EOL;
         }
