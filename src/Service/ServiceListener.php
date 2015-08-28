@@ -2,8 +2,8 @@
 
 namespace Wecamp\FlyingLiqourice\Service;
 
-use Wecamp\FlyingLiqourice\Domain\Game\Coords;
 use Wecamp\FlyingLiqourice\Domain\Game;
+use Wecamp\FlyingLiqourice\Domain\Game\Coords;
 use Wecamp\FlyingLiqourice\Domain\GameIdentifier;
 use Wecamp\FlyingLiqourice\Storage\SqliteGameRepository;
 
@@ -78,6 +78,7 @@ class ServiceListener
 
     /**
      * @param string $id
+     *
      * @return string
      */
     private function start($id = '')
@@ -95,6 +96,7 @@ class ServiceListener
         $this->repository()->save($game);
 
         echo (string) $game;
+
         return 'STARTED ' . $game->id();
     }
 
@@ -138,12 +140,15 @@ class ServiceListener
         foreach ($game->ships() as $ship) {
             $result .= '- SHIP ' . $ship->startPoint() . ' ' . $ship->endPoint() . PHP_EOL;
         }
+
         return $result;
     }
 
     /**
      * Shortcut for fire
+     *
      * @param $location
+     *
      * @return string
      */
     private function f($location)
@@ -153,7 +158,9 @@ class ServiceListener
 
     /**
      * fire on $location
+     *
      * @param string $location
+     *
      * @return string
      */
     private function fire($location)
@@ -161,14 +168,14 @@ class ServiceListener
         $identifier = GameIdentifier::fromString($this->id());
         $game       = $this->repository()->get($identifier);
 
-        $coordElements = explode('.', $location);
-        $coords        = Coords::create((int) $coordElements[0], (int) $coordElements[1]);
+        $coords        = Coords::fromString($location);
         $result        = $game->fire($coords);
 
         $this->repository()->save($game);
 
         echo 'Firing on ' . $location . ' in game: ' . $game->id() . PHP_EOL;
         echo (string) $game;
+
         return $result;
     }
 
@@ -178,6 +185,7 @@ class ServiceListener
         $game       = $this->repository()->get($identifier);
 
         $this->repository()->save($game);
+
         return 'FIELD ' . PHP_EOL . $game;
     }
 }
