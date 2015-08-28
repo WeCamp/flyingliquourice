@@ -2,6 +2,7 @@
 <?php
 
 require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../data/ships.php';
 $loop   = React\EventLoop\Factory::create();
 $socket = new React\Socket\Server($loop);
 $conns  = new \SplObjectStorage();
@@ -15,6 +16,12 @@ $repository = new \Wecamp\FlyingLiqourice\Storage\SqliteGameRepository($dbh);
 $socket->on('connection', function ($conn) use ($conns, $repository) {
     $conn->id = '';
     $conns->attach($conn);
+    $conn->write(PHP_EOL . PHP_EOL);
+    $conn->write(showShip() . PHP_EOL);
+    $conn->write('WELCOME TO BATTLESHIP' . PHP_EOL);
+    $conn->write(PHP_EOL . PHP_EOL);
+    $conn->write('Use `help` to see all available commands' . PHP_EOL);
+
     $conn->on('data', function ($data) use ($conns, $conn, $repository) {
         foreach ($conns as $current) {
             if ($conn === $current) {
