@@ -215,18 +215,41 @@ class Fields implements \IteratorAggregate
 
     public function __toString()
     {
-        $result     = PHP_EOL . '|';
+        $result     = PHP_EOL;
         $currentRow = 0;
-        foreach ($this->elements as $element) {
-            if ($element->coords()->y() > $currentRow) {
-                $result .= '|' . PHP_EOL . '|';
-                $currentRow++;
-            }
+        $rows = 0;
+        $columns = [];
+        $columnSize = 0;
 
-            $result .= (string) $element;
+        foreach ($this->elements as $element) {
+            if ($element->coords()->y() > $rows) {
+                $rows++;
+            }
+            if ($element->coords()->y() > $columnSize) {
+                $columnSize++;
+            }
         }
 
-        return $result . '|' . PHP_EOL;
+        $result .= str_pad($currentRow, strlen($rows), ' ', STR_PAD_LEFT) . '|';
+
+        foreach ($this->elements as $element) {
+            if ($element->coords()->y() > $currentRow) {
+                $result .= '|' . PHP_EOL . str_pad(($currentRow + 1), strlen($rows), ' ', STR_PAD_LEFT) . '|';
+                $currentRow++;
+            }
+            $columns[$element->coords()->x()] = str_pad($element->coords()->x(), strlen($columnSize), ' ', STR_PAD_RIGHT);
+            $result .= str_pad((string) $element, strlen($columnSize), ' ', STR_PAD_LEFT);
+        }
+        $result .= '|' . PHP_EOL;
+
+        for ($i = 0; $i < strlen($columnSize); $i++) {
+            $result .= str_pad(' ', strlen($rows) + 1, ' ', STR_PAD_LEFT);
+            foreach ($columns as $column) {
+                $result .= ' ' .substr($column, $i, 1);
+            }
+            $result .= PHP_EOL;
+        }
+        return $result;
     }
 
     /**

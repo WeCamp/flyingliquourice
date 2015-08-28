@@ -157,8 +157,12 @@ class Field
 
     public function __toString()
     {
-        if ($this->hit()) {
+        if ($this->hasSunkenShip()) {
             return '🔥 ';
+        }
+
+        if ($this->hit()) {
+            return '💣 ';
         }
 
         if ($this->miss()) {
