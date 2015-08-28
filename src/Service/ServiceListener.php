@@ -168,8 +168,8 @@ class ServiceListener
         $identifier = GameIdentifier::fromString($this->id());
         $game       = $this->repository()->get($identifier);
 
-        $coords        = Coords::fromString($location);
-        $result        = $game->fire($coords);
+        $coords = Coords::fromString($location);
+        $result = $game->fire($coords);
 
         $this->repository()->save($game);
 
