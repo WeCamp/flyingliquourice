@@ -2,6 +2,7 @@
 <?php
 
 require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../data/ships.php';
 $loop   = React\EventLoop\Factory::create();
 $socket = new React\Socket\Server($loop);
 $conns  = new \SplObjectStorage();
@@ -43,23 +44,3 @@ echo 'You can connect to it by running: telnet ' . $ip . ' ' . $port . "\n";
 $socket->listen($port, $ip);
 $loop->run();
 
-function showShip() {
-    return '
-
-                                     |__
-                                     |\/
-                                     ---
-                                     / | [
-                              !      | |||
-                            _/|     _/|-++\'
-                        +  +--|    |--|--|_ |-
-                     { /|__|  |/\__|  |--- |||__/
-                    +---------------___[}-_===_.\'____                 /\
-                ____`-\' ||___-{]_| _[}-  |     |_[___\==--            \/   _
- __..._____--==/___]_|__|_____________________________[___\==--____,------\' .7
-|                                                                     BB-61/
- \_________________________________________________________________________|
-    Matthew Bace
- ';
-
-}
