@@ -53,7 +53,7 @@ class ServiceListener
             $argument = trim($tokenized[1]);
         }
 
-        if (!in_array($command, ['start', 'f', 'fire', 'status', 'surrender', 'field'])) {
+        if (!in_array($command, ['start', 'restart', 'f', 'fire', 'status', 'surrender', 'field', 'help'])) {
             throw new \InvalidArgumentException('Wrong command given');
         }
 
@@ -80,12 +80,11 @@ class ServiceListener
      * @param string $id
      * @return string
      */
-    private function start($id = '')
+    private function start($size = '')
     {
-        if (strlen($id) !== 0) {
-            $identifier = GameIdentifier::fromString($id);
-            $game       = $this->repository()->get($identifier);
-            echo 'Game restarted: ' . $game->id() . PHP_EOL;
+        if (strlen($size) !== 0) {
+            $size = explode(':', $size);
+            $game = Game::create((int) $size[0], (int) $size[1]);
         } else {
             $game = Game::create();
             echo 'New game started: ' . $game->id() . PHP_EOL;
@@ -96,6 +95,23 @@ class ServiceListener
 
         echo (string) $game;
         return 'STARTED ' . $game->id();
+    }
+
+    /**
+     * @param string $id
+     * @return string
+     */
+    private function restart($id = '')
+    {
+        $identifier = GameIdentifier::fromString($id);
+        $game       = $this->repository()->get($identifier);
+        echo 'Game restarted: ' . $game->id() . PHP_EOL;
+
+        $this->id = $game->id();
+        $this->repository()->save($game);
+
+        echo (string) $game;
+        return 'RESTARTED ' . $game->id();
     }
 
     /**
@@ -178,6 +194,22 @@ class ServiceListener
         $game       = $this->repository()->get($identifier);
 
         $this->repository()->save($game);
-        return 'FIELD ' . PHP_EOL . $game;
+        $gameString = (string) $game;
+        $gameString = str_replace(['=', 'v', '^', '<', '>', 'ǁ'], ' ', $gameString);
+        return 'FIELD ' . PHP_EOL . $gameString . PHP_EOL; // . PHP_EOL . $game;
+    }
+
+    private function help()
+    {
+        $help = 'Battleship commands:' . PHP_EOL;
+        $help .= '' . PHP_EOL;
+        $help .= 'START [X:Y]   | ' . 'Start a game, optional give the X and Y size, defaults to 10x10' . PHP_EOL;
+        $help .= 'RESTART <ID>  | ' . 'Restart a game with the given ID' .PHP_EOL;
+        $help .= 'STATUS        | ' . 'Show the status of the game' . PHP_EOL;
+        $help .= 'FIRE <X.Y>    | ' . 'Fire on the given coords' . PHP_EOL;
+        $help .= 'FIELD         | ' . 'Show the current field with all shots on it' . PHP_EOL;
+        $help .= 'SURRENDER     | ' . 'Give up the game and lose' . PHP_EOL;
+
+        return $help;
     }
 }
