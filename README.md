@@ -4,6 +4,15 @@
 
 # FLYING LIQUOURICE
 
+# Battleship
+
+Made by:
+
+* [Frank van den Brink](https://twitter.com/fvdb)
+* [Randy Geraads](https://twitter.com/rgeraads)
+* [Henri de Jong](https://github.com/aiolos)
+* [Steven de Vries](https://twitter.com/Stedv)
+
 ## Setting up
 
 * `composer install`
@@ -13,3 +22,18 @@
 
 * run `php ./bin/battleship.php [ip] [port]` ([ip] and [port] are optional and default to 127.0.0.1 and 1337)
 * connect to your ip and port using telnet: `telnet [ip] [port]`
+
+## Playing the game
+
+### Battleship commands
+
+Command | Description
+------------ | -------------
+`START [X:Y]` | Starts a game, optional give the X and Y size, defaults to 10x10
+`RESUME <ID>` | Restart a game with the given ID
+`STATUS` | Show the status of the game
+`FIRE <X.Y>` | Fire on the given coordinates
+`FIELD` | Show the current field with all shots on it
+`SURRENDER` | Give up the game and lose
+
+**Honourable mention to our WeCamp coach: [Eli White](https://twitter.com/EliW)**
