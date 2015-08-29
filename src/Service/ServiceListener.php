@@ -54,7 +54,7 @@ class ServiceListener
         }
 
         if (!in_array($command, ['start', 'resume', 'f', 'fire', 'status', 'surrender', 'field', 'help'])) {
-            throw new \InvalidArgumentException('Wrong command given');
+            throw new Game\InvalidCommandException('Wrong command given');
         }
 
         return $this->$command($argument);
