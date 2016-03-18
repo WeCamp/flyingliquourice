@@ -10,7 +10,7 @@ $conns  = new \SplObjectStorage();
 $ip   = array_key_exists(1, $argv) ? $argv[1] : '127.0.0.1';
 $port = array_key_exists(2, $argv) ? $argv[2] : 1337;
 
-$dbh        = new \PDO('sqlite:'. __DIR__ . '/../data/games');
+$dbh        = new \PDO('sqlite:' . __DIR__ . '/../data/games');
 $repository = new \Wecamp\FlyingLiqourice\Storage\SqliteGameRepository($dbh);
 
 $socket->on('connection', function ($conn) use ($conns, $repository) {
