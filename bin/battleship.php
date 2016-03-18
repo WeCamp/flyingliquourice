@@ -48,5 +48,3 @@ try {
 } catch (exception $e) {
     echo 'Daemon: ',  $e->getMessage(), "\n";
 }
-
-
