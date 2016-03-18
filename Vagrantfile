@@ -60,7 +60,7 @@ Vagrant.configure("2") do |config|
             ansible.limit = 'all'
         end
     else
-        # config.vm.provision :shell, path: "ansible/windows.sh", args: ["battleshiphp.nl"]
+        config.vm.provision :shell, path: "ansible/windows.sh", args: ["battleshiphp.nl"]
     end
 
     config.vm.synced_folder "./", "/vagrant", type: "nfs"
