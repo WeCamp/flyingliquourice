@@ -68,7 +68,7 @@ Vagrant.configure("2") do |config|
     config.vm.provision "shell", privileged: false, inline: <<-EOF
       echo "Vagrant Box provisioned!"
       echo "Local web address is http://#{config.vm.hostname}"
-      echo "You can connect to battleship using telnet: telnet {config.vm.hostname} 1337 "
+      echo "You can connect to battleship using telnet: telnet #{config.vm.hostname} 1337 "
     EOF
 
 end
