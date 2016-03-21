@@ -13,7 +13,11 @@ Made by:
 * [Henri de Jong](https://github.com/aiolos)
 * [Steven de Vries](https://twitter.com/Stedv)
 
-## Setting up
+## Setting up Automatically
+* Make sure you have the following packages installed: Virtualbox, Vagrant, vagrant-hostsupdater and Ansible (ignore Ansible if you are on Windows)
+* Run `vagrant up`
+
+## Setting up Manually
 
 * `composer install`
 * `./vendor/bin/phinx migrate -e development`
