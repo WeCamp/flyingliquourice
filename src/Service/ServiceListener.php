@@ -1,11 +1,11 @@
 <?php
 
-namespace Wecamp\FlyingLiqourice\Service;
+namespace Wecamp\FlyingLiquorice\Service;
 
-use Wecamp\FlyingLiqourice\Domain\Game\Coords;
-use Wecamp\FlyingLiqourice\Domain\Game;
-use Wecamp\FlyingLiqourice\Domain\GameIdentifier;
-use Wecamp\FlyingLiqourice\Storage\SqliteGameRepository;
+use Wecamp\FlyingLiquorice\Domain\Game\Coords;
+use Wecamp\FlyingLiquorice\Domain\Game;
+use Wecamp\FlyingLiquorice\Domain\GameIdentifier;
+use Wecamp\FlyingLiquorice\Storage\SqliteGameRepository;
 
 class ServiceListener
 {
@@ -77,7 +77,7 @@ class ServiceListener
     }
 
     /**
-     * @param string $id
+     * @param string $size
      * @return string
      */
     private function start($size = '')
@@ -152,7 +152,7 @@ class ServiceListener
         echo 'Surrendering game ' . $game->id() . PHP_EOL;
         echo (string) $game;
 
-        $result = 'SURRENDERED';
+        $result = 'SURRENDERED' . PHP_EOL;
         foreach ($game->ships() as $ship) {
             $result .= '- SHIP ' . $ship->startPoint() . ' ' . $ship->endPoint() . PHP_EOL;
         }

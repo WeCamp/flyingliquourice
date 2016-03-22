@@ -1,13 +1,13 @@
 <?php
 
-namespace Wecamp\FlyingLiqourice\Domain;
+namespace Wecamp\FlyingLiquorice\Domain;
 
 use Assert\Assertion;
-use Wecamp\FlyingLiqourice\Domain\Game\Coords;
-use Wecamp\FlyingLiqourice\Domain\Game\FireResult;
-use Wecamp\FlyingLiqourice\Domain\Game\GameIsLockedException;
-use Wecamp\FlyingLiqourice\Domain\Game\Grid;
-use Wecamp\FlyingLiqourice\Domain\Game\Score;
+use Wecamp\FlyingLiquorice\Domain\Game\Coords;
+use Wecamp\FlyingLiquorice\Domain\Game\FireResult;
+use Wecamp\FlyingLiquorice\Domain\Game\GameIsLockedException;
+use Wecamp\FlyingLiquorice\Domain\Game\Grid;
+use Wecamp\FlyingLiquorice\Domain\Game\Score;
 
 final class Game
 {

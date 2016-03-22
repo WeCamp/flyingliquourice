@@ -1,7 +1,7 @@
 .vagrant/
 .idea/
-/vendor/
 /data/
+/logs/
 !data/.gitkeep
 !data/ships.php
 humbuglog.txt

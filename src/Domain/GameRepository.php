@@ -1,6 +1,6 @@
 <?php
 
-namespace Wecamp\FlyingLiqourice\Domain;
+namespace Wecamp\FlyingLiquorice\Domain;
 
 interface GameRepository
 {

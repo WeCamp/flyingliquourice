@@ -1,6 +1,6 @@
 <?php
 
-namespace Wecamp\FlyingLiqourice\Domain\Game;
+namespace Wecamp\FlyingLiquorice\Domain\Game;
 
 final class CoordsTest extends \PHPUnit_Framework_TestCase
 {

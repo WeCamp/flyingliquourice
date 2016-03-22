@@ -1,12 +1,11 @@
 <?php
 
-namespace Wecamp\FlyingLiqourice\Domain;
+namespace Wecamp\FlyingLiquorice\Domain;
 
-use Rhumsaa\Uuid\Uuid;
-use Wecamp\FlyingLiqourice\Domain\Game\Coords;
-use Wecamp\FlyingLiqourice\Domain\Game\Grid;
-use Wecamp\FlyingLiqourice\Domain\Game\FireResult;
-use Wecamp\FlyingLiqourice\Domain\Game\GameIsLockedException;
+use Ramsey\Uuid\Uuid;
+use Wecamp\FlyingLiquorice\Domain\Game\Coords;
+use Wecamp\FlyingLiquorice\Domain\Game\FireResult;
+use Wecamp\FlyingLiquorice\Domain\Game\GameIsLockedException;
 
 final class GameTest extends \PHPUnit_Framework_TestCase
 {

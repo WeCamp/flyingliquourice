@@ -1,10 +1,10 @@
 <?php
 
-namespace Wecamp\FlyingLiqourice\Storage;
+namespace Wecamp\FlyingLiquorice\Storage;
 
-use Wecamp\FlyingLiqourice\Domain\Game;
-use Wecamp\FlyingLiqourice\Domain\GameRepository as DomainGameRepository;
-use Wecamp\FlyingLiqourice\Domain\Identifier;
+use Wecamp\FlyingLiquorice\Domain\Game;
+use Wecamp\FlyingLiquorice\Domain\GameRepository as DomainGameRepository;
+use Wecamp\FlyingLiquorice\Domain\Identifier;
 
 final class SqliteGameRepository implements DomainGameRepository
 {

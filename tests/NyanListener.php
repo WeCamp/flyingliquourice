@@ -1,7 +1,6 @@
 <?php
 
-//namespace Mockery\Adapter\Phpunit;
-namespace Wecamp\FlyingLiqourice;
+namespace Wecamp\FlyingLiquorice;
 
 class NyanListener implements \PHPUnit_Framework_TestListener
 {

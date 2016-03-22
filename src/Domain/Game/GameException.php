@@ -1,6 +1,6 @@
 <?php
 
-namespace Wecamp\FlyingLiqourice\Domain\Game;
+namespace Wecamp\FlyingLiquorice\Domain\Game;
 
 class GameException extends \InvalidArgumentException
 {

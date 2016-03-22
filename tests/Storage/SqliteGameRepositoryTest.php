@@ -1,10 +1,10 @@
 <?php
 
-namespace Wecamp\FlyingLiqourice\Storage;
+namespace Wecamp\FlyingLiquorice\Storage;
 
 use Mockery as m;
-use Wecamp\FlyingLiqourice\Domain\Game;
-use Wecamp\FlyingLiqourice\Domain\GameIdentifier;
+use Wecamp\FlyingLiquorice\Domain\Game;
+use Wecamp\FlyingLiquorice\Domain\GameIdentifier;
 
 final class SqliteGameRepositoryTest extends \PHPUnit_Framework_TestCase
 {
