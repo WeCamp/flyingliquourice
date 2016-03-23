@@ -1,8 +1,8 @@
 <?php
 
-namespace Wecamp\FlyingLiqourice\Domain;
+namespace Wecamp\FlyingLiquorice\Domain;
 
-use Rhumsaa\Uuid\Uuid;
+use Ramsey\Uuid\Uuid;
 
 final class GameIdentifierTest extends \PHPUnit_Framework_TestCase
 {

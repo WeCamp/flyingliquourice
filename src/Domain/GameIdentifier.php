@@ -1,10 +1,10 @@
 <?php
 
-namespace Wecamp\FlyingLiqourice\Domain;
+namespace Wecamp\FlyingLiquorice\Domain;
 
 use Assert\Assertion;
 use Assert\InvalidArgumentException;
-use Rhumsaa\Uuid\Uuid;
+use Ramsey\Uuid\Uuid;
 
 final class GameIdentifier implements Identifier
 {

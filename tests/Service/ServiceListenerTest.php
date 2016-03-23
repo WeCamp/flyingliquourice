@@ -6,10 +6,10 @@
  * Time: 2:28 PM
  */
 
-namespace Wecamp\FlyingLiqourice\Service;
+namespace Wecamp\FlyingLiquorice\Service;
 
-use Rhumsaa\Uuid\Uuid;
-use Wecamp\FlyingLiqourice\Domain\Game;
+use Ramsey\Uuid\Uuid;
+use Wecamp\FlyingLiquorice\Domain\Game;
 
 class ServiceListenerTest extends \PHPUnit_Framework_TestCase
 {
