@@ -1,6 +1,9 @@
-[![Stories in Ready](https://badge.waffle.io/WeCamp/flyingliquourice.png?label=ready&title=Ready)](https://waffle.io/WeCamp/flyingliquourice)
-[![Build Status](https://travis-ci.org/WeCamp/flyingliquourice.svg?branch=travis)](https://travis-ci.org/WeCamp/flyingliquourice)
-[![StyleCI](https://styleci.io/repos/41369464/shield)](https://styleci.io/repos/41369464)
+[![Stories in Ready](https://img.shields.io/waffle/label/WeCamp/flyingliquourice/Ready.svg)](https://waffle.io/WeCamp/flyingliquourice)
+[![Build Status](https://img.shields.io/travis/WeCamp/flyingliquourice/travis.svg)](https://travis-ci.org/WeCamp/flyingliquourice)
+[![StyleCI](https://styleci.io/repos/41369464/shield?style=flat)](https://styleci.io/repos/41369464)
+[![Code Climate](https://img.shields.io/codeclimate/github/WeCamp/flyingliquourice.svg)](https://codeclimate.com/github/WeCamp/flyingliquourice/)
+[![License](https://img.shields.io/github/license/WeCamp/flyingliquourice.svg)](LICENSE.txt)
+[![WeCamp Approved](https://img.shields.io/badge/WeCamp-Approved-ff69b4.svg)](http://weca.mp/)
 
 # FLYING LIQUOURICE
 
